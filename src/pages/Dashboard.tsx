@@ -9,7 +9,7 @@ interface Presentation {
   title: string;
   status: string;
   created_at: string;
-  slides_content: any[] | null;
+  slides_content: any;
 }
 
 export default function Dashboard() {
