@@ -4,7 +4,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/com
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Check, GripVertical, FileText, List, AlignLeft, Columns2, BarChart3, Users, Phone, Save } from "lucide-react";
+import { Check, GripVertical, FileText, List, AlignLeft, Columns2, BarChart3, Users, Phone, Save, LayoutTemplate } from "lucide-react";
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, DragEndEvent } from "@dnd-kit/core";
 import { arrayMove, SortableContext, useSortable, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
@@ -13,6 +13,7 @@ import { SlidePreview } from "@/components/slides/SlidePreview";
 import { SlideEditorFactory } from "@/components/slides/editors/SlideEditorFactory";
 import { toast } from "@/hooks/use-toast";
 import { generatePresentation } from "@/services/pptxExport";
+import { Skeleton } from "@/components/ui/skeleton";
 import type { Json } from "@/integrations/supabase/types";
 
 const templates = [
