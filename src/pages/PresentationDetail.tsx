@@ -115,6 +115,9 @@ export default function PresentationDetail() {
         <Button onClick={() => navigate(`/presentation/${id}/edit`)}>
           <Pencil className="h-4 w-4 mr-2" /> Im Editor öffnen
         </Button>
+        <Button variant="outline" onClick={() => setShowShare(true)}>
+          <Share2 className="h-4 w-4 mr-2" /> Teilen
+        </Button>
         <Button onClick={handleExport} disabled={exporting} variant="cta">
           {exporting ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" /> Wird generiert...</> : <><Download className="h-4 w-4 mr-2" /> Exportieren</>}
         </Button>
@@ -134,6 +137,8 @@ export default function PresentationDetail() {
           </AlertDialogContent>
         </AlertDialog>
       </div>
+
+      {id && <ShareDialog open={showShare} onOpenChange={setShowShare} presentationId={id} />}
     </div>
   );
 }
