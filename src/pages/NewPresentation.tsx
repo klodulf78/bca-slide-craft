@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Check, GripVertical, FileText, List, AlignLeft, Columns2, BarChart3, Users, Phone, Save, LayoutTemplate } from "lucide-react";
+import { FileUploadZone } from "@/components/FileUploadZone";
+import { formatFileContext, type ProcessedFile } from "@/services/fileParser";
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, DragEndEvent } from "@dnd-kit/core";
 import { arrayMove, SortableContext, useSortable, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
