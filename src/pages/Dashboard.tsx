@@ -21,7 +21,7 @@ export default function Dashboard() {
     const loadData = async () => {
       const { data } = await supabase
         .from("presentations")
-        .select("id, title, status, created_at, slides_content")
+        .select("id, title, status, created_at, slides_content, source")
         .order("created_at", { ascending: false })
         .limit(5);
 
