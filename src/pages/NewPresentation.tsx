@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Check, GripVertical, FileText, List, AlignLeft, Columns2, BarChart3, Users, Phone, Save, LayoutTemplate } from "lucide-react";
+import { FileUploadZone } from "@/components/FileUploadZone";
+import { formatFileContext, type ProcessedFile } from "@/services/fileParser";
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, DragEndEvent } from "@dnd-kit/core";
 import { arrayMove, SortableContext, useSortable, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
@@ -73,6 +75,7 @@ export default function NewPresentation() {
   const autoSaveRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const [presets, setPresets] = useState<Preset[]>([]);
   const [presetsLoading, setPresetsLoading] = useState(true);
+  const [attachedFile, setAttachedFile] = useState<ProcessedFile | null>(null);
 
   // Load presets
   useEffect(() => {
@@ -309,6 +312,11 @@ export default function NewPresentation() {
           <CardContent className="space-y-4">
             <Input placeholder="Projektname" value={title} onChange={(e) => setTitle(e.target.value)} className="bg-[hsl(228,33%,98%)]" />
             <Textarea placeholder="Kurze Beschreibung (optional)" value={description} onChange={(e) => setDescription(e.target.value)} rows={3} className="bg-[hsl(228,33%,98%)]" />
+            <div>
+              <p className="text-sm font-medium text-foreground mb-1">Projektdokument anhängen (optional)</p>
+              <p className="text-xs text-muted-foreground mb-2">Lade ein Briefing, einen Report oder Daten hoch — die KI nutzt den Inhalt als Grundlage für die Slides.</p>
+              <FileUploadZone onFileProcessed={setAttachedFile} context="presentation" />
+            </div>
             <Button onClick={() => slidesContent.length > 0 ? setStep(4) : setStep(2)} disabled={!title.trim()}>
               {slidesContent.length > 0 ? "Weiter zu Inhalten" : "Weiter"}
             </Button>
@@ -395,6 +403,26 @@ export default function NewPresentation() {
                     <span className="text-sm font-medium text-muted-foreground">Slide {index + 1}</span>
                     {tpl && <tpl.icon className="h-4 w-4 text-primary" />}
                     <span className="font-heading font-semibold text-foreground">{tpl?.name}</span>
+                    <FileUploadZone
+                      onFileProcessed={(result) => {
+                        // For slide-level: auto-fill chart data or body text
+                        const c = { ...slide.content };
+                        if (slide.template_id === "chart" && (result.fileType === "xlsx" || result.fileType === "csv")) {
+                          const headers = result.extractedContent.headers || [];
+                          const rows = result.extractedContent.tableData || [];
+                          c.chart_data = rows.slice(0, 10).map((row: any[]) => ({
+                            label: String(row[0] ?? ""),
+                            value: String(row[1] ?? ""),
+                          }));
+                          if (headers.length > 0) c.source = `Quelle: ${result.fileName}`;
+                        } else if (result.extractedContent.text) {
+                          c.body = (c.body || "") + "\n" + result.extractedContent.text.slice(0, 500);
+                        }
+                        updateSlideContent(index, c);
+                      }}
+                      context="slide"
+                      compact
+                    />
                     {complete && <Check className="h-4 w-4 text-green-600 ml-auto" />}
                   </div>
                   <div className="flex gap-6 flex-col lg:flex-row">

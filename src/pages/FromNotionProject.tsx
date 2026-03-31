@@ -10,6 +10,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Loader2, Plus, Trash2, CalendarIcon, Lightbulb, Database, ArrowRight } from "lucide-react";
+import { FileUploadZone } from "@/components/FileUploadZone";
+import { formatFileContext, type ProcessedFile } from "@/services/fileParser";
 import { supabase } from "@/integrations/supabase/client";
 import { SlidePreview } from "@/components/slides/SlidePreview";
 import { generatePresentation } from "@/services/pptxExport";
@@ -64,6 +66,7 @@ export default function FromNotionProject() {
     team: [{ name: "", role: "Project Lead", university: "" }],
     contactPerson: "", contactEmail: "",
   });
+  const [attachedFile, setAttachedFile] = useState<ProcessedFile | null>(null);
 
   useEffect(() => {
     supabase.from("presentation_presets").select("*").eq("is_global", true)
@@ -120,7 +123,9 @@ Team: ${teamStr || "[Nicht angegeben]"}
 Kontakt: ${data.contactPerson || "[Nicht angegeben]"}, ${data.contactEmail || "[Nicht angegeben]"}
 
 Nutze die Vorlage "${selectedPreset.title}" als Grundstruktur und fülle sie mit den Projektdaten.
-Verwende echte Daten wo verfügbar und Platzhalter [in eckigen Klammern] wo Daten fehlen.`;
+Verwende echte Daten wo verfügbar und Platzhalter [in eckigen Klammern] wo Daten fehlen.${
+  attachedFile ? "\n\n" + formatFileContext(attachedFile) : ""
+}`;
 
     try {
       const { data: fnData, error } = await supabase.functions.invoke("generate-slides", {
@@ -296,6 +301,12 @@ Verwende echte Daten wo verfügbar und Platzhalter [in eckigen Klammern] wo Date
                   <Label>Kontakt-E-Mail</Label>
                   <Input value={data.contactEmail} onChange={e => setData(p => ({ ...p, contactEmail: e.target.value }))} type="email" />
                 </div>
+              </div>
+
+              <div>
+                <Label>Projektdokument anhängen (optional)</Label>
+                <p className="text-xs text-muted-foreground mb-2">Lade ein Briefing, Report oder Daten hoch — die KI nutzt den Inhalt als Grundlage.</p>
+                <FileUploadZone onFileProcessed={setAttachedFile} context="presentation" />
               </div>
             </CardContent>
           </Card>

@@ -3,6 +3,8 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Send, MessageSquare, Plus, Loader2, Sparkles, FileDown, ArrowRight, Trash2, FolderOpen, Zap } from "lucide-react";
+import { FileUploadZone } from "@/components/FileUploadZone";
+import { formatFileContext, type ProcessedFile } from "@/services/fileParser";
 import { supabase } from "@/integrations/supabase/client";
 import { SlidePreview } from "@/components/slides/SlidePreview";
 import { generatePresentation } from "@/services/pptxExport";
@@ -122,6 +124,7 @@ export default function ChatAssistant() {
   const [recentProjects, setRecentProjects] = useState<{ project_name: string }[]>([]);
   const [showProjectInput, setShowProjectInput] = useState(false);
   const [customProjectName, setCustomProjectName] = useState("");
+  const [attachedFile, setAttachedFile] = useState<ProcessedFile | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const initialMessageSent = useRef(false);
@@ -215,7 +218,14 @@ export default function ChatAssistant() {
     const messageText = (text || input).trim();
     if (!messageText || isLoading) return;
 
-    const userMsg: Message = { role: "user", content: messageText };
+    // Append file context if attached
+    let fullMessage = messageText;
+    if (attachedFile) {
+      fullMessage += "\n\n" + formatFileContext(attachedFile);
+      setAttachedFile(null);
+    }
+
+    const userMsg: Message = { role: "user", content: fullMessage };
     const updatedMessages = [...messages, userMsg];
     setMessages(updatedMessages);
     setInput("");
@@ -634,19 +644,31 @@ export default function ChatAssistant() {
 
         {/* Input area */}
         <div className="border-t border-border p-4">
-          <div className="flex gap-2 max-w-3xl mx-auto items-end">
-            <Textarea
-              ref={textareaRef}
-              placeholder="Beschreibe dein Projekt..."
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={handleKeyDown}
-              rows={1}
-              className="min-h-[44px] max-h-32 resize-none"
-            />
-            <Button onClick={() => handleSend()} size="icon" disabled={!input.trim() || isLoading} className="shrink-0">
-              {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
-            </Button>
+          <div className="max-w-3xl mx-auto space-y-2">
+            {attachedFile && (
+              <FileUploadZone
+                onFileProcessed={setAttachedFile}
+                compact={false}
+              />
+            )}
+            <div className="flex gap-2 items-end">
+              <FileUploadZone
+                onFileProcessed={setAttachedFile}
+                compact
+              />
+              <Textarea
+                ref={textareaRef}
+                placeholder="Beschreibe dein Projekt..."
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyDown={handleKeyDown}
+                rows={1}
+                className="min-h-[44px] max-h-32 resize-none flex-1"
+              />
+              <Button onClick={() => handleSend()} size="icon" disabled={!input.trim() || isLoading} className="shrink-0">
+                {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
+              </Button>
+            </div>
           </div>
         </div>
       </div>
