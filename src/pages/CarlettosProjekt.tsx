@@ -1,4 +1,4 @@
-import { FolderOpen, Linkedin } from "lucide-react";
+import { FolderOpen, Linkedin, Calculator } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 
