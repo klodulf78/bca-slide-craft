@@ -3,6 +3,8 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Send, MessageSquare, Plus, Loader2, Sparkles, FileDown, ArrowRight, Trash2, FolderOpen, Zap } from "lucide-react";
+import { FileUploadZone } from "@/components/FileUploadZone";
+import { formatFileContext, type ProcessedFile } from "@/services/fileParser";
 import { supabase } from "@/integrations/supabase/client";
 import { SlidePreview } from "@/components/slides/SlidePreview";
 import { generatePresentation } from "@/services/pptxExport";
