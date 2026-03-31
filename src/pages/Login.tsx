@@ -39,7 +39,7 @@ export default function Login() {
       <Card className="w-full max-w-md border-none shadow-2xl">
         <CardHeader className="text-center pb-2">
           <div className="mb-4 flex justify-center">
-            <BCALogo variant="dark" size="lg" />
+            <BCALogo variant="blue" className="h-16 w-auto" />
           </div>
           <p className="font-heading text-sm text-muted-foreground">Slide Studio</p>
           <CardTitle className="font-heading text-xl mt-4">

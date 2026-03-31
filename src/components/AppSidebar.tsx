@@ -41,7 +41,7 @@ export function AppSidebar() {
       <div className="p-4 border-b border-border">
         {!collapsed ? (
           <div className="flex items-center gap-2">
-            <BCALogo variant="dark" size="sm" className="h-6 w-auto" />
+            <BCALogo variant="blue" className="h-8 w-auto" />
             <span className="font-heading font-normal text-sm text-brand-blue">Slide Studio</span>
           </div>
         ) : (

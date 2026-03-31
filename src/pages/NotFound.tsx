@@ -1,6 +1,7 @@
 import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
+import { BCALogo } from "@/components/BCALogo";
 
 const NotFound = () => {
   const location = useLocation();
@@ -12,8 +13,8 @@ const NotFound = () => {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background">
       <div className="text-center space-y-4">
-        <div className="flex items-center justify-center gap-1 mb-6">
-          <span className="font-heading font-bold text-2xl text-navy">BCA</span>
+        <div className="flex items-center justify-center gap-2 mb-6">
+          <BCALogo variant="blue" className="h-10 w-auto" />
           <span className="font-heading text-2xl text-primary">Slide Studio</span>
         </div>
         <h1 className="text-6xl font-heading font-bold text-foreground">404</h1>
