@@ -261,6 +261,9 @@ export default function PresentationEditor() {
           <Button size="sm" variant="ghost" onClick={() => setShowShareDialog(true)} title="Teilen">
             <Share2 className="h-4 w-4" />
           </Button>
+          <Button size="sm" variant="outline" onClick={() => setShowReview(true)} title="Review-Check">
+            <CheckCircle className="h-4 w-4 mr-1" /> Review
+          </Button>
           <Button size="sm" variant="cta" onClick={handleExport} disabled={exporting}>
             {exporting ? <Loader2 className="h-4 w-4 mr-1 animate-spin" /> : <Download className="h-4 w-4 mr-1" />}
             Exportieren
