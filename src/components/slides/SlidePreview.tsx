@@ -73,7 +73,7 @@ function TitlePreview({ content }: { content: Record<string, any> }) {
   const dark = content.dark_variant;
   return (
     <div className={cn("flex-1 flex flex-col items-center justify-center text-center gap-0.5 rounded", dark ? "bg-[#010038]" : "")}>
-      <div className="w-6 h-1 bg-[#0524DE] rounded-full mb-1" />
+      <img src={dark ? "/bca-logo-white.svg" : "/bca-logo-blue.svg"} alt="BCA" className="h-3 w-auto mb-1" />
       <p className={cn("text-[7px] font-bold leading-tight truncate max-w-[180px]", dark ? "text-white" : "text-[#010038]")}>
         {content.title || "Projekttitel"}
       </p>
