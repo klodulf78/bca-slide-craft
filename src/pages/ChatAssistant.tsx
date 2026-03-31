@@ -412,6 +412,23 @@ export default function ChatAssistant() {
         <div className="flex-1 overflow-y-auto p-6 space-y-4">
           {showSuggestions ? (
             <div className="flex-1 flex flex-col items-center justify-center h-full gap-6">
+              {/* Recent projects bar */}
+              {recentProjects.length > 0 && (
+                <div className="flex items-center gap-2 flex-wrap justify-center">
+                  <FolderOpen className="h-4 w-4 text-muted-foreground" />
+                  <span className="text-xs text-muted-foreground">Letzte Projekte:</span>
+                  {recentProjects.map((p) => (
+                    <button
+                      key={p.project_name}
+                      onClick={() => handleSend(`Ich arbeite am Projekt "${p.project_name}" weiter.`)}
+                      className="text-xs px-2 py-1 rounded-full border border-border bg-card hover:border-primary hover:shadow-sm transition-all"
+                    >
+                      {p.project_name}
+                    </button>
+                  ))}
+                </div>
+              )}
+
               <div className="text-center space-y-2">
                 <Sparkles className="h-10 w-10 mx-auto text-primary opacity-60" />
                 <h2 className="text-xl font-semibold text-foreground">BCA Slide-Assistent</h2>
