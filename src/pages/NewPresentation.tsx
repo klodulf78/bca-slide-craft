@@ -34,6 +34,14 @@ interface SlideContent {
   content: Record<string, any>;
 }
 
+interface Preset {
+  id: string;
+  title: string;
+  description: string | null;
+  slides_structure: any[];
+  is_global: boolean;
+}
+
 function getRequiredFields(templateId: string): string[] {
   switch (templateId) {
     case "title": return ["title"];
