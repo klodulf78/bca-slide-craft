@@ -14,6 +14,8 @@ import SettingsPage from "./pages/SettingsPage";
 import PresentationDetail from "./pages/PresentationDetail";
 import PresentationEditor from "./pages/PresentationEditor";
 import FromNotionProject from "./pages/FromNotionProject";
+import LinkedinBuilder from "./pages/LinkedinBuilder";
+import CarlettosProjekt from "./pages/CarlettosProjekt";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
