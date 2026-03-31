@@ -93,8 +93,8 @@ export default function PresentationDetail() {
       {/* Actions */}
       <div className="flex gap-3">
         <Button onClick={() => navigate("/")} variant="outline">Zurück</Button>
-        <Button onClick={() => toast({ title: "Export-Funktion wird in Kürze freigeschaltet" })} className="bg-orange-accent hover:bg-orange-accent/90 text-white">
-          <Download className="h-4 w-4 mr-2" /> Exportieren
+        <Button onClick={handleExport} disabled={exporting} className="bg-orange-accent hover:bg-orange-accent/90 text-white">
+          {exporting ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" /> Wird generiert...</> : <><Download className="h-4 w-4 mr-2" /> Exportieren</>}
         </Button>
         <AlertDialog>
           <AlertDialogTrigger asChild>
