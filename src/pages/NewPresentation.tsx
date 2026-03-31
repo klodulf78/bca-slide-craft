@@ -9,6 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { SlidePreview } from "@/components/slides/SlidePreview";
 import { SlideEditorFactory } from "@/components/slides/editors/SlideEditorFactory";
 import { toast } from "@/hooks/use-toast";
+import type { Json } from "@/integrations/supabase/types";
 
 const templates = [
   { id: "title", name: "Titelslide", description: "Projektname + BCA Logo + Datum", icon: FileText, colors: ["bg-primary", "bg-cyan-accent"] },
