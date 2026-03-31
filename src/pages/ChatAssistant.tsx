@@ -23,6 +23,13 @@ interface ChatConversation {
   updated_at: string;
 }
 
+interface ChoiceBlock {
+  type: "choices";
+  question: string;
+  options: { label: string; description?: string; value: string }[];
+  allow_multiple?: boolean;
+}
+
 interface ParsedPresentation {
   title: string;
   total_slides: number;
