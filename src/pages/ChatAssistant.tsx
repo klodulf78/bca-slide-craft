@@ -124,6 +124,7 @@ export default function ChatAssistant() {
   const [recentProjects, setRecentProjects] = useState<{ project_name: string }[]>([]);
   const [showProjectInput, setShowProjectInput] = useState(false);
   const [customProjectName, setCustomProjectName] = useState("");
+  const [attachedFile, setAttachedFile] = useState<ProcessedFile | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const initialMessageSent = useRef(false);
