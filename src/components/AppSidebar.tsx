@@ -1,4 +1,4 @@
-import { Home, Plus, MessageSquare, Upload, Settings, Database, Linkedin, FolderOpen } from "lucide-react";
+import { Home, Plus, MessageSquare, Upload, Settings, Database, FolderOpen } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useEffect, useState } from "react";
 import {
@@ -22,7 +22,6 @@ const navItems = [
   { title: "Chat-Assistent", url: "/chat", icon: MessageSquare },
   { title: "Upload", url: "/upload", icon: Upload },
   { title: "Einstellungen", url: "/settings", icon: Settings },
-  { title: "Carls LinkedIn Builder", url: "/linkedin", icon: Linkedin },
   { title: "Carlettos Projekt", url: "/carlettos-projekt", icon: FolderOpen },
 ];
 

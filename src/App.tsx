@@ -37,8 +37,8 @@ const App = () => (
           <Route path="/settings" element={<AppLayout><SettingsPage /></AppLayout>} />
           <Route path="/presentation/:id" element={<AppLayout><PresentationDetail /></AppLayout>} />
           <Route path="/presentation/:id/edit" element={<AppLayout><PresentationEditor /></AppLayout>} />
-          <Route path="/linkedin" element={<AppLayout><LinkedinBuilder /></AppLayout>} />
           <Route path="/carlettos-projekt" element={<AppLayout><CarlettosProjekt /></AppLayout>} />
+          <Route path="/carlettos-projekt/linkedin" element={<AppLayout><LinkedinBuilder /></AppLayout>} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
