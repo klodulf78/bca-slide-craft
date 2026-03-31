@@ -1,6 +1,7 @@
 import PptxGenJS from 'pptxgenjs';
 import { BCA_COLORS, BCA_FONTS } from '@/constants/brand';
 import { ICON_UNICODE } from '@/components/slides/editors/IconPicker';
+import { LOGO_BLUE_BASE64, LOGO_WHITE_BASE64 } from '@/constants/logoData';
 
 interface SlideContent {
   template_id: string;
@@ -11,7 +12,7 @@ interface SlideContent {
 // ── Footer ──────────────────────────────────────────────
 function addFooter(slide: PptxGenJS.Slide, slideNumber: number, totalSlides: number) {
   slide.addShape('line', { x: 0.5, y: 5.2, w: 9.0, h: 0, line: { color: BCA_COLORS.divider, width: 0.75 } });
-  slide.addText('BCA Slide Studio', { x: 0.5, y: 5.25, w: 4, h: 0.25, fontSize: 8, fontFace: BCA_FONTS.body, color: BCA_COLORS.textSecondary });
+  slide.addImage({ data: `image/png;base64,${LOGO_BLUE_BASE64}`, x: 0.5, y: 5.25, h: 0.3, w: 0.69, sizing: { type: 'contain', w: 0.69, h: 0.3 } });
   slide.addText(`${slideNumber} / ${totalSlides}`, { x: 7.5, y: 5.25, w: 2.0, h: 0.25, fontSize: 8, fontFace: BCA_FONTS.body, color: BCA_COLORS.textSecondary, align: 'right' });
 }
 
@@ -42,7 +43,8 @@ function renderTitleSlide(pptx: PptxGenJS, content: Record<string, any>) {
   const slide = pptx.addSlide();
   slide.background = { fill: bg };
 
-  slide.addText('BCA', { x: 3.75, y: 0.6, w: 2.5, h: 0.6, fontSize: 24, fontFace: BCA_FONTS.heading, bold: true, color: textColor, align: 'center' });
+  const logoData = dark ? LOGO_WHITE_BASE64 : LOGO_BLUE_BASE64;
+  slide.addImage({ data: `image/png;base64,${logoData}`, x: 3.85, y: 0.4, h: 0.9, w: 2.07, sizing: { type: 'contain', w: 2.07, h: 0.9 } });
   slide.addShape('line', { x: 3.0, y: 1.75, w: 4.0, h: 0, line: { color: BCA_COLORS.cyan, width: 2 } });
   slide.addText(content.title || '', { x: 0.5, y: 2.0, w: 9.0, h: 0.75, fontSize: 32, fontFace: BCA_FONTS.heading, bold: true, color: textColor, align: 'center', shrinkText: true });
 
@@ -358,7 +360,8 @@ function renderClosingSlide(pptx: PptxGenJS, content: Record<string, any>) {
   const slide = pptx.addSlide();
   slide.background = { fill: bg };
 
-  slide.addText('BCA', { x: 3.75, y: 0.7, w: 2.5, h: 0.6, fontSize: 24, fontFace: BCA_FONTS.heading, bold: true, color: textColor, align: 'center' });
+  const logoData = dark ? LOGO_WHITE_BASE64 : LOGO_BLUE_BASE64;
+  slide.addImage({ data: `image/png;base64,${logoData}`, x: 3.85, y: 0.5, h: 0.9, w: 2.07, sizing: { type: 'contain', w: 2.07, h: 0.9 } });
   slide.addText(content.thanks || 'Vielen Dank!', { x: 0.5, y: 2.2, w: 9.0, h: 0.65, fontSize: 32, fontFace: BCA_FONTS.heading, bold: true, color: textColor, align: 'center' });
   slide.addShape('line', { x: 3.5, y: 2.95, w: 3.0, h: 0, line: { color: BCA_COLORS.orange, width: 2 } });
 
