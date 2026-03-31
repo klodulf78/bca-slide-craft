@@ -15,6 +15,7 @@ import PresentationDetail from "./pages/PresentationDetail";
 import PresentationEditor from "./pages/PresentationEditor";
 import FromNotionProject from "./pages/FromNotionProject";
 import LinkedinBuilder from "./pages/LinkedinBuilder";
+import Buchhaltungstool from "./pages/Buchhaltungstool";
 import CarlettosProjekt from "./pages/CarlettosProjekt";
 import NotFound from "./pages/NotFound";
 
