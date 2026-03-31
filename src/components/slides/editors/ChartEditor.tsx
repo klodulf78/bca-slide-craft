@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -6,6 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Plus, Trash2 } from "lucide-react";
 import { CharCount } from "./CharCount";
+import { ActionTitleHint } from "./ActionTitleHint";
 
 interface Props {
   content: Record<string, any>;
@@ -17,6 +19,8 @@ export function ChartEditor({ content, onChange }: Props) {
   const layout = content.layout || "kpi";
   const kpis = content.kpis || Array.from({ length: 3 }, () => ({ value: "", label: "", sublabel: "" }));
   const chartData = content.chart_data || [{ label: "", value: "" }];
+  const annotations = content.annotations || [];
+  const [showSubtitle, setShowSubtitle] = useState(!!content.subtitle);
 
   const updateKpi = (i: number, key: string, val: string) => {
     const next = [...kpis];
@@ -35,6 +39,21 @@ export function ChartEditor({ content, onChange }: Props) {
     update("chart_data", next);
   };
 
+  const addAnnotation = () => {
+    if (annotations.length >= 2) return;
+    update("annotations", [...annotations, { text: "", position: "top_right" }]);
+  };
+
+  const updateAnnotation = (i: number, key: string, val: string) => {
+    const next = [...annotations];
+    next[i] = { ...next[i], [key]: val };
+    update("annotations", next);
+  };
+
+  const removeAnnotation = (i: number) => {
+    update("annotations", annotations.filter((_: any, j: number) => j !== i));
+  };
+
   return (
     <div className="space-y-3">
       <div>
@@ -45,7 +64,17 @@ export function ChartEditor({ content, onChange }: Props) {
         <Label>Slide-Titel *</Label>
         <Input value={content.title || ""} onChange={(e) => update("title", e.target.value.slice(0, 80))} placeholder="Titel" className="bg-[hsl(228,33%,98%)]" />
         <CharCount current={content.title?.length || 0} max={80} />
+        <ActionTitleHint title={content.title || ""} />
       </div>
+      {showSubtitle ? (
+        <div>
+          <Label>Subtitle / Kontext</Label>
+          <Input value={content.subtitle || ""} onChange={(e) => update("subtitle", e.target.value.slice(0, 100))} placeholder="z.B. Quelle: Statista, 2025 | DACH-Region" className="bg-[hsl(228,33%,98%)]" />
+          <CharCount current={content.subtitle?.length || 0} max={100} />
+        </div>
+      ) : (
+        <button type="button" onClick={() => setShowSubtitle(true)} className="text-xs text-primary hover:underline">+ Subtitle hinzufügen</button>
+      )}
       <div>
         <Label>Layout</Label>
         <RadioGroup value={layout} onValueChange={(v) => update("layout", v)} className="flex gap-4">
@@ -127,6 +156,38 @@ export function ChartEditor({ content, onChange }: Props) {
           </div>
         </div>
       )}
+
+      {/* Annotations */}
+      <div className="space-y-2">
+        <Label>Annotations (Callout-Boxen)</Label>
+        {annotations.map((ann: any, i: number) => (
+          <div key={i} className="flex gap-2 items-center p-2 bg-muted/30 rounded">
+            <Input
+              value={ann.text}
+              onChange={(e) => updateAnnotation(i, "text", e.target.value.slice(0, 60))}
+              placeholder="z.B. +23% YoY"
+              className="bg-[hsl(228,33%,98%)] flex-1"
+            />
+            <Select value={ann.position} onValueChange={(v) => updateAnnotation(i, "position", v)}>
+              <SelectTrigger className="bg-[hsl(228,33%,98%)] w-32"><SelectValue /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value="top_right">Oben rechts</SelectItem>
+                <SelectItem value="top_left">Oben links</SelectItem>
+                <SelectItem value="bottom_right">Unten rechts</SelectItem>
+                <SelectItem value="bottom_left">Unten links</SelectItem>
+              </SelectContent>
+            </Select>
+            <Button variant="ghost" size="sm" onClick={() => removeAnnotation(i)}>
+              <Trash2 className="h-3.5 w-3.5" />
+            </Button>
+          </div>
+        ))}
+        {annotations.length < 2 && (
+          <Button variant="outline" size="sm" onClick={addAnnotation}>
+            <Plus className="h-3.5 w-3.5 mr-1" /> Annotation hinzufügen
+          </Button>
+        )}
+      </div>
 
       <div>
         <Label>Quellenangabe</Label>

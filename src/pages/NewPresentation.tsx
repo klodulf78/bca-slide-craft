@@ -18,6 +18,7 @@ import type { Json } from "@/integrations/supabase/types";
 
 const templates = [
   { id: "title", name: "Titelslide", description: "Projektname + BCA Logo + Datum", icon: FileText, colors: ["bg-primary", "bg-cyan-accent"] },
+  { id: "exec_summary", name: "Executive Summary", description: "Zusammenfassung der Ergebnisse in SCR-Struktur", icon: FileText, colors: ["bg-medium-blue", "bg-primary"], badge: "Empfohlen" },
   { id: "agenda", name: "Agenda", description: "Nummerierte Themenliste", icon: List, colors: ["bg-medium-blue", "bg-muted"] },
   { id: "content", name: "Content", description: "Überschrift + Fließtext + Bild", icon: AlignLeft, colors: ["bg-muted", "bg-primary"] },
   { id: "two-column", name: "Zwei-Spalter", description: "Zwei Inhaltsbereiche nebeneinander", icon: Columns2, colors: ["bg-brand-blue", "bg-brand-blue"] },
@@ -45,6 +46,7 @@ interface Preset {
 function getRequiredFields(templateId: string): string[] {
   switch (templateId) {
     case "title": return ["title"];
+    case "exec_summary": return ["title", "situation", "complication", "resolution"];
     case "content": return ["title"];
     case "two-column": return ["title"];
     case "chart": return ["title"];
@@ -344,6 +346,11 @@ export default function NewPresentation() {
                         <p className="font-medium text-sm text-foreground">{t.name}</p>
                         <p className="text-xs text-muted-foreground">{t.description}</p>
                       </div>
+                      {(t as any).badge && (
+                        <span className="text-[9px] font-semibold px-1.5 py-0.5 rounded-full bg-primary/10 text-primary ml-auto whitespace-nowrap">
+                          {(t as any).badge}
+                        </span>
+                      )}
                     </div>
                     {selected && (
                       <div className="absolute top-2 right-2 h-5 w-5 bg-primary rounded-full flex items-center justify-center">
@@ -517,10 +524,11 @@ function SortableSlideItem({ id, index }: { id: string; index: number }) {
 function getDefaultContent(templateId: string): Record<string, any> {
   switch (templateId) {
     case "title": return { title: "", subtitle: "", date: new Date().toISOString().split("T")[0], team_name: "", dark_variant: false };
+    case "exec_summary": return { title: "", subtitle: "", situation: "", complication: "", resolution: "", key_takeaway: "" };
     case "agenda": return { items: ["", ""], active_item: null };
-    case "content": return { section_header: "", title: "", body: "", as_bullets: false, takeaway: "" };
-    case "two-column": return { section_header: "", title: "", col1_title: "", col1_body: "", col2_title: "", col2_body: "", layout: "symmetric" };
-    case "chart": return { section_header: "", title: "", layout: "kpi", kpi_count: 3, kpis: [{ value: "", label: "", sublabel: "" }, { value: "", label: "", sublabel: "" }, { value: "", label: "", sublabel: "" }], chart_type: "bar", chart_data: [{ label: "", value: "" }], legend: "", source: "" };
+    case "content": return { section_header: "", title: "", subtitle: "", body: "", as_bullets: false, takeaway: "" };
+    case "two-column": return { section_header: "", title: "", subtitle: "", col1_title: "", col1_body: "", col2_title: "", col2_body: "", layout: "symmetric" };
+    case "chart": return { section_header: "", title: "", subtitle: "", layout: "kpi", kpi_count: 3, kpis: [{ value: "", label: "", sublabel: "" }, { value: "", label: "", sublabel: "" }, { value: "", label: "", sublabel: "" }], chart_type: "bar", chart_data: [{ label: "", value: "" }], legend: "", source: "", annotations: [] };
     case "team": return { title: "Unser Team", members: [{ name: "", role: "", university: "" }, { name: "", role: "", university: "" }] };
     case "contact": return { thanks: "Vielen Dank!", subtitle: "Wir freuen uns auf eure Fragen.", email: "kontakt@bca-berlin.de", website: "www.bca-berlin.de", linkedin: "linkedin.com/company/bca-berlin", contact_person: "", dark_variant: false };
     default: return {};

@@ -14,7 +14,7 @@ function addFooter(slide: PptxGenJS.Slide, slideNumber: number, totalSlides: num
   slide.addText(`${slideNumber} / ${totalSlides}`, { x: 7.5, y: 5.25, w: 2.0, h: 0.25, fontSize: 8, fontFace: BCA_FONTS.body, color: BCA_COLORS.textSecondary, align: 'right' });
 }
 
-// ── Section header + title + cyan line (shared) ─────────
+// ── Section header + title + subtitle + cyan line (shared) ─
 function addSectionHeader(slide: PptxGenJS.Slide, content: Record<string, any>) {
   let titleY = 0.5;
   if (content.section_header?.trim()) {
@@ -22,8 +22,15 @@ function addSectionHeader(slide: PptxGenJS.Slide, content: Record<string, any>) 
     titleY = 1.0;
   }
   slide.addText(content.title || '', { x: 0.5, y: titleY, w: 9.0, h: 0.55, fontSize: 24, fontFace: BCA_FONTS.heading, color: BCA_COLORS.navy, bold: true, shrinkText: true });
-  slide.addShape('line', { x: 0.5, y: titleY + 0.65, w: 9.0, h: 0, line: { color: BCA_COLORS.cyan, width: 2 } });
-  return titleY + 0.65;
+
+  const hasSubtitle = !!content.subtitle?.trim();
+  const subtitleOffset = hasSubtitle ? 0.05 : 0;
+  if (hasSubtitle) {
+    slide.addText(content.subtitle, { x: 0.5, y: titleY + 0.55, w: 9.0, h: 0.2, fontSize: 11, fontFace: BCA_FONTS.body, color: BCA_COLORS.textSecondary, valign: 'top' });
+  }
+  const lineY = titleY + 0.65 + subtitleOffset;
+  slide.addShape('line', { x: 0.5, y: lineY, w: 9.0, h: 0, line: { color: BCA_COLORS.cyan, width: 2 } });
+  return lineY;
 }
 
 // ── 1. Title Slide ──────────────────────────────────────
@@ -188,8 +195,106 @@ function renderChartDataSlide(pptx: PptxGenJS, content: Record<string, any>, sli
     }
   }
 
+  // Annotations
+  if (content.annotations && content.annotations.length > 0) {
+    const positions: Record<string, { x: number; y: number }> = {
+      top_right: { x: 7.5, y: 1.8 },
+      top_left: { x: 0.5, y: 1.8 },
+      bottom_right: { x: 7.5, y: 4.2 },
+      bottom_left: { x: 0.5, y: 4.2 },
+    };
+    content.annotations.forEach((annotation: any) => {
+      const pos = positions[annotation.position] || positions.top_right;
+      slide.addShape('rect', {
+        x: pos.x, y: pos.y, w: 2.0, h: 0.35,
+        fill: { color: BCA_COLORS.white }, rectRadius: 0.04,
+        line: { color: BCA_COLORS.divider, width: 1 },
+        shadow: { type: 'outer', blur: 3, offset: 1, opacity: 0.15 },
+      });
+      slide.addText(annotation.text, {
+        x: pos.x + 0.1, y: pos.y, w: 1.8, h: 0.35,
+        fontSize: 9, fontFace: BCA_FONTS.body, bold: true,
+        color: BCA_COLORS.navy, valign: 'middle',
+      });
+    });
+  }
+
   if (content.source?.trim()) {
     slide.addText(`Quelle: ${content.source}`, { x: 0.5, y: 4.8, w: 9.0, h: 0.25, fontSize: 8, fontFace: BCA_FONTS.body, color: BCA_COLORS.textSecondary });
+  }
+
+  addFooter(slide, slideNum, total);
+}
+
+// ── 5b. Executive Summary ───────────────────────────────
+function renderExecSummarySlide(pptx: PptxGenJS, content: Record<string, any>, slideNum: number, total: number) {
+  const slide = pptx.addSlide();
+  slide.background = { fill: BCA_COLORS.white };
+
+  slide.addText('EXECUTIVE SUMMARY', {
+    x: 0.5, y: 0.5, w: 4.0, h: 0.2,
+    fontSize: 11, fontFace: BCA_FONTS.heading, bold: true,
+    color: BCA_COLORS.blue, isTextBox: true,
+  });
+  slide.addText(content.title || '', {
+    x: 0.5, y: 0.75, w: 9.0, h: 0.5,
+    fontSize: 24, fontFace: BCA_FONTS.heading, bold: true,
+    color: BCA_COLORS.navy, valign: 'top', shrinkText: true,
+  });
+  if (content.subtitle?.trim()) {
+    slide.addText(content.subtitle, {
+      x: 0.5, y: 1.3, w: 9.0, h: 0.2,
+      fontSize: 11, fontFace: BCA_FONTS.body,
+      color: BCA_COLORS.textSecondary, valign: 'top',
+    });
+  }
+  slide.addShape('line', {
+    x: 0.5, y: 1.55, w: 9.0, h: 0,
+    line: { color: BCA_COLORS.cyan, width: 2 },
+  });
+
+  const boxes = [
+    { label: 'Ausgangslage', text: content.situation, color: BCA_COLORS.midblue, x: 0.5 },
+    { label: 'Herausforderung', text: content.complication, color: BCA_COLORS.orange, x: 3.5 },
+    { label: 'Empfehlung', text: content.resolution, color: BCA_COLORS.blue, x: 6.5 },
+  ];
+  boxes.forEach((box) => {
+    slide.addShape('rect', {
+      x: box.x, y: 1.75, w: 2.7, h: 2.8,
+      fill: { color: BCA_COLORS.lightBg }, rectRadius: 0.06,
+      line: { width: 0 },
+    });
+    slide.addShape('rect', {
+      x: box.x, y: 1.75, w: 0.04, h: 2.8,
+      fill: { color: box.color }, line: { width: 0 },
+    });
+    slide.addText(box.label, {
+      x: box.x + 0.15, y: 1.85, w: 2.4, h: 0.25,
+      fontSize: 10, fontFace: BCA_FONTS.heading, bold: true,
+      color: box.color, valign: 'top',
+    });
+    slide.addText(box.text || '', {
+      x: box.x + 0.15, y: 2.15, w: 2.4, h: 2.25,
+      fontSize: 11, fontFace: BCA_FONTS.body,
+      color: BCA_COLORS.textSecondary, valign: 'top', shrinkText: true,
+    });
+  });
+
+  if (content.key_takeaway?.trim()) {
+    slide.addShape('rect', {
+      x: 0.5, y: 4.7, w: 9.0, h: 0.4,
+      fill: { color: BCA_COLORS.lightBg }, rectRadius: 0.04,
+      line: { width: 0 },
+    });
+    slide.addShape('rect', {
+      x: 0.5, y: 4.7, w: 0.04, h: 0.4,
+      fill: { color: BCA_COLORS.navy }, line: { width: 0 },
+    });
+    slide.addText(content.key_takeaway, {
+      x: 0.7, y: 4.7, w: 8.6, h: 0.4,
+      fontSize: 11, fontFace: BCA_FONTS.body, bold: true,
+      color: BCA_COLORS.navy, valign: 'middle',
+    });
   }
 
   addFooter(slide, slideNum, total);
@@ -275,6 +380,7 @@ export async function generatePresentation(
     const slideNum = index + 1;
     switch (slide.template_id) {
       case 'title': renderTitleSlide(pptx, slide.content); break;
+      case 'exec_summary': renderExecSummarySlide(pptx, slide.content, slideNum, totalSlides); break;
       case 'agenda': renderAgendaSlide(pptx, slide.content, slideNum, totalSlides); break;
       case 'content': renderContentSlide(pptx, slide.content, slideNum, totalSlides); break;
       case 'two-column': renderTwoColumnSlide(pptx, slide.content, slideNum, totalSlides); break;

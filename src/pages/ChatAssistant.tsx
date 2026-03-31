@@ -35,9 +35,10 @@ interface ParsedPresentation {
 }
 
 const SUGGESTIONS = [
-  { label: "Abschlusspräsentation", prompt: "Erstelle eine Abschlusspräsentation für ein BCA-Beratungsprojekt" },
+  { label: "📊 Abschlusspräsentation mit Executive Summary", prompt: "Erstelle eine Abschlusspräsentation mit Executive Summary für ein BCA-Beratungsprojekt" },
   { label: "Pitch Deck", prompt: "Erstelle ein kurzes Pitch Deck für ein Startup" },
   { label: "Marktanalyse", prompt: "Erstelle Slides für eine Marktanalyse-Präsentation" },
+  { label: "🔍 Slide-Titel zu Action Titles verbessern", prompt: "Ich habe folgende Slide-Titel. Bitte verbessere sie zu Action Titles nach dem Pyramid Principle: 1. Marktübersicht, 2. Wettbewerbsanalyse, 3. Finanzielle Ergebnisse" },
 ];
 
 function parseJsonFromResponse(text: string): ParsedPresentation | null {

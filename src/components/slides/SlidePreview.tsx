@@ -23,7 +23,40 @@ export function SlidePreview({ templateId, content = {}, className }: SlidePrevi
         {templateId === "chart" && <ChartPreview content={content} />}
         {templateId === "team" && <TeamPreview content={content} />}
         {templateId === "contact" && <ContactPreview content={content} />}
+        {templateId === "exec_summary" && <ExecSummaryPreview content={content} />}
       </div>
+    </div>
+  );
+}
+
+function ExecSummaryPreview({ content }: { content: Record<string, any> }) {
+  return (
+    <div className="flex-1 flex flex-col gap-0.5">
+      <p className="text-[4px] font-bold text-[#0524DE] uppercase tracking-wider">EXECUTIVE SUMMARY</p>
+      <p className="text-[6px] font-bold text-[#010038] truncate">{content.title || "Kernaussage"}</p>
+      {content.subtitle && (
+        <p className="text-[4px] text-[#4A4A6A] truncate">{content.subtitle}</p>
+      )}
+      <div className="w-full h-[1px] bg-[#27E0FF] my-0.5" />
+      <div className="flex-1 flex gap-0.5">
+        <div className="flex-1 bg-[#F8F9FC] rounded-sm p-0.5 border-l-2 border-[#0063F2]">
+          <p className="text-[3px] font-bold text-[#0063F2]">Ausgangslage</p>
+          <p className="text-[3px] text-[#4A4A6A] line-clamp-3">{content.situation || ""}</p>
+        </div>
+        <div className="flex-1 bg-[#F8F9FC] rounded-sm p-0.5 border-l-2 border-[#FF671E]">
+          <p className="text-[3px] font-bold text-[#FF671E]">Herausforderung</p>
+          <p className="text-[3px] text-[#4A4A6A] line-clamp-3">{content.complication || ""}</p>
+        </div>
+        <div className="flex-1 bg-[#F8F9FC] rounded-sm p-0.5 border-l-2 border-[#0524DE]">
+          <p className="text-[3px] font-bold text-[#0524DE]">Empfehlung</p>
+          <p className="text-[3px] text-[#4A4A6A] line-clamp-3">{content.resolution || ""}</p>
+        </div>
+      </div>
+      {content.key_takeaway && (
+        <div className="bg-[#F8F9FC] rounded-sm p-0.5 border-l-2 border-[#010038]">
+          <p className="text-[3px] font-bold text-[#010038] truncate">{content.key_takeaway}</p>
+        </div>
+      )}
     </div>
   );
 }
