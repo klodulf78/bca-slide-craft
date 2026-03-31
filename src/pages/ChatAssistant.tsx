@@ -644,19 +644,31 @@ export default function ChatAssistant() {
 
         {/* Input area */}
         <div className="border-t border-border p-4">
-          <div className="flex gap-2 max-w-3xl mx-auto items-end">
-            <Textarea
-              ref={textareaRef}
-              placeholder="Beschreibe dein Projekt..."
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={handleKeyDown}
-              rows={1}
-              className="min-h-[44px] max-h-32 resize-none"
-            />
-            <Button onClick={() => handleSend()} size="icon" disabled={!input.trim() || isLoading} className="shrink-0">
-              {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
-            </Button>
+          <div className="max-w-3xl mx-auto space-y-2">
+            {attachedFile && (
+              <FileUploadZone
+                onFileProcessed={setAttachedFile}
+                compact={false}
+              />
+            )}
+            <div className="flex gap-2 items-end">
+              <FileUploadZone
+                onFileProcessed={setAttachedFile}
+                compact
+              />
+              <Textarea
+                ref={textareaRef}
+                placeholder="Beschreibe dein Projekt..."
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyDown={handleKeyDown}
+                rows={1}
+                className="min-h-[44px] max-h-32 resize-none flex-1"
+              />
+              <Button onClick={() => handleSend()} size="icon" disabled={!input.trim() || isLoading} className="shrink-0">
+                {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
+              </Button>
+            </div>
           </div>
         </div>
       </div>

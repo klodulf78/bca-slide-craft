@@ -302,6 +302,12 @@ Verwende echte Daten wo verfügbar und Platzhalter [in eckigen Klammern] wo Date
                   <Input value={data.contactEmail} onChange={e => setData(p => ({ ...p, contactEmail: e.target.value }))} type="email" />
                 </div>
               </div>
+
+              <div>
+                <Label>Projektdokument anhängen (optional)</Label>
+                <p className="text-xs text-muted-foreground mb-2">Lade ein Briefing, Report oder Daten hoch — die KI nutzt den Inhalt als Grundlage.</p>
+                <FileUploadZone onFileProcessed={setAttachedFile} context="presentation" />
+              </div>
             </CardContent>
           </Card>
           <div className="flex gap-3">

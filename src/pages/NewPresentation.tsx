@@ -403,6 +403,26 @@ export default function NewPresentation() {
                     <span className="text-sm font-medium text-muted-foreground">Slide {index + 1}</span>
                     {tpl && <tpl.icon className="h-4 w-4 text-primary" />}
                     <span className="font-heading font-semibold text-foreground">{tpl?.name}</span>
+                    <FileUploadZone
+                      onFileProcessed={(result) => {
+                        // For slide-level: auto-fill chart data or body text
+                        const c = { ...slide.content };
+                        if (slide.template_id === "chart" && (result.fileType === "xlsx" || result.fileType === "csv")) {
+                          const headers = result.extractedContent.headers || [];
+                          const rows = result.extractedContent.tableData || [];
+                          c.chart_data = rows.slice(0, 10).map((row: any[]) => ({
+                            label: String(row[0] ?? ""),
+                            value: String(row[1] ?? ""),
+                          }));
+                          if (headers.length > 0) c.source = `Quelle: ${result.fileName}`;
+                        } else if (result.extractedContent.text) {
+                          c.body = (c.body || "") + "\n" + result.extractedContent.text.slice(0, 500);
+                        }
+                        updateSlideContent(index, c);
+                      }}
+                      context="slide"
+                      compact
+                    />
                     {complete && <Check className="h-4 w-4 text-green-600 ml-auto" />}
                   </div>
                   <div className="flex gap-6 flex-col lg:flex-row">
