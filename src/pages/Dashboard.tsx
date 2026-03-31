@@ -66,6 +66,8 @@ export default function Dashboard() {
     { title: "Per KI erstellen", description: "Beschreibe dein Projekt und die KI erstellt Slides", icon: MessageSquare, onClick: () => navigate("/chat") },
     { title: "Aus Projekt erstellen", description: "Nutze Daten aus eurem Projekt für Slides", icon: Database, onClick: () => navigate("/new/from-project") },
     { title: "Quick Update", description: "Kurzes Status-Update für den nächsten Kunden-Call", icon: Zap, onClick: () => navigate("/chat?message=" + encodeURIComponent("Erstelle ein kurzes Status-Update für meinen nächsten Kunden-Call (3-5 Slides).")) },
+    { title: "Carls LinkedIn Builder", description: "Erstelle und optimiere LinkedIn-Posts mit KI", icon: Linkedin, onClick: () => navigate("/linkedin") },
+    { title: "Carlettos Projekt", description: "Projektübersicht und Verwaltung", icon: FolderOpen, onClick: () => navigate("/carlettos-projekt") },
   ];
 
   return (
