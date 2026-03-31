@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
+import { BCALogo } from "@/components/BCALogo";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -37,34 +38,19 @@ export default function Login() {
     <div className="min-h-screen flex items-center justify-center bg-navy px-4">
       <Card className="w-full max-w-md border-none shadow-2xl">
         <CardHeader className="text-center pb-2">
-          <div className="mb-4">
-            <span className="font-heading font-bold text-2xl text-navy">BCA</span>
-            <span className="font-heading font-normal text-2xl text-brand-blue ml-1">Slide Studio</span>
+          <div className="mb-4 flex justify-center">
+            <BCALogo variant="dark" size="lg" />
           </div>
-          <CardTitle className="font-heading text-xl">
+          <p className="font-heading text-sm text-muted-foreground">Slide Studio</p>
+          <CardTitle className="font-heading text-xl mt-4">
             {isSignUp ? "Account erstellen" : "Anmelden"}
           </CardTitle>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
-            <Input
-              type="email"
-              placeholder="E-Mail-Adresse"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-            <Input
-              type="password"
-              placeholder="Passwort"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              minLength={6}
-            />
-            {error && (
-              <p className="text-sm text-destructive">{error}</p>
-            )}
+            <Input type="email" placeholder="E-Mail-Adresse" value={email} onChange={(e) => setEmail(e.target.value)} required />
+            <Input type="password" placeholder="Passwort" value={password} onChange={(e) => setPassword(e.target.value)} required minLength={6} />
+            {error && <p className="text-sm text-destructive">{error}</p>}
             <Button type="submit" className="w-full" disabled={loading}>
               {loading ? "Wird geladen..." : isSignUp ? "Registrieren" : "Anmelden"}
             </Button>

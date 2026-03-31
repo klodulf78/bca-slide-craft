@@ -1,4 +1,4 @@
-import { Plus, Upload, Clock, Sparkles, ArrowUpCircle, MessageSquare, Pencil, Download, Trash2 } from "lucide-react";
+import { Plus, Upload, Clock, Sparkles, ArrowUpCircle, MessageSquare, Pencil, Download, Trash2, Database } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
@@ -62,8 +62,9 @@ export default function Dashboard() {
 
   const actions = [
     { title: "Neue Präsentation", description: "Starte ein neues Projekt mit Templates", icon: Plus, onClick: () => navigate("/new") },
-    { title: "Präsentation hochladen", description: "Lade eine .pptx-Datei zur Analyse hoch", icon: Upload, onClick: () => navigate("/upload") },
+    { title: "Upload & Analyse", description: "Lade eine .pptx-Datei zur KI-Analyse hoch", icon: Upload, onClick: () => navigate("/upload") },
     { title: "Per KI erstellen", description: "Beschreibe dein Projekt und die KI erstellt Slides", icon: MessageSquare, onClick: () => navigate("/chat") },
+    { title: "Aus Projekt erstellen", description: "Nutze Daten aus eurem Projekt für Slides", icon: Database, onClick: () => navigate("/new/from-project") },
   ];
 
   return (
@@ -75,19 +76,19 @@ export default function Dashboard() {
         <p className="text-muted-foreground mt-1">Erstelle und verwalte deine Projekt-Präsentationen</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {actions.map((action) => (
           <Card
             key={action.title}
             className="cursor-pointer hover:shadow-md hover:scale-[1.01] transition-all duration-200 border-border"
             onClick={action.onClick}
           >
-            <CardHeader>
-              <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center mb-3">
-                <action.icon className="h-5 w-5 text-primary" />
+            <CardHeader className="p-4">
+              <div className="h-9 w-9 rounded-lg bg-primary/10 flex items-center justify-center mb-2">
+                <action.icon className="h-4 w-4 text-primary" />
               </div>
-              <CardTitle className="text-lg font-heading">{action.title}</CardTitle>
-              <CardDescription>{action.description}</CardDescription>
+              <CardTitle className="text-sm font-heading">{action.title}</CardTitle>
+              <CardDescription className="text-xs">{action.description}</CardDescription>
             </CardHeader>
           </Card>
         ))}
@@ -148,7 +149,6 @@ export default function Dashboard() {
                     </p>
                   </div>
                   <div className="flex items-center gap-2">
-                    {/* Quick actions on hover */}
                     <div className="hidden group-hover:flex items-center gap-1">
                       <Button size="icon" variant="ghost" className="h-8 w-8" onClick={(e) => { e.stopPropagation(); navigate(`/presentation/${p.id}/edit`); }} title="Bearbeiten">
                         <Pencil className="h-3.5 w-3.5" />

@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter,
 } from "@/components/ui/dialog";
@@ -15,7 +16,7 @@ import {
 import {
   ChevronLeft, ChevronRight, Download, ArrowLeft, Plus, MoreVertical,
   Copy, Trash2, RefreshCw, Loader2, Save, FileText, List, AlignLeft,
-  Columns2, BarChart3, Users, Phone, Check,
+  Columns2, BarChart3, Users, Phone, Check, Share2, Bookmark,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { SlidePreview } from "@/components/slides/SlidePreview";
@@ -24,6 +25,8 @@ import { generatePresentation } from "@/services/pptxExport";
 import { toast } from "@/hooks/use-toast";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { ShareDialog } from "@/components/ShareDialog";
+import { Textarea } from "@/components/ui/textarea";
 import type { Json } from "@/integrations/supabase/types";
 
 interface SlideContent {
@@ -70,6 +73,10 @@ export default function PresentationEditor() {
   const [hasChanges, setHasChanges] = useState(false);
   const [showLeaveDialog, setShowLeaveDialog] = useState(false);
   const [pendingNavigation, setPendingNavigation] = useState<string | null>(null);
+  const [showShareDialog, setShowShareDialog] = useState(false);
+  const [showSavePreset, setShowSavePreset] = useState(false);
+  const [presetTitle, setPresetTitle] = useState("");
+  const [presetDesc, setPresetDesc] = useState("");
   const autoSaveRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const slideStripRef = useRef<HTMLDivElement>(null);
 
@@ -246,6 +253,12 @@ export default function PresentationEditor() {
           <Button size="sm" variant="outline" onClick={saveDraft} disabled={saving}>
             <Save className="h-4 w-4 mr-1" /> Speichern
           </Button>
+          <Button size="sm" variant="ghost" onClick={() => setShowSavePreset(true)} title="Als Vorlage speichern">
+            <Bookmark className="h-4 w-4" />
+          </Button>
+          <Button size="sm" variant="ghost" onClick={() => setShowShareDialog(true)} title="Teilen">
+            <Share2 className="h-4 w-4" />
+          </Button>
           <Button size="sm" variant="cta" onClick={handleExport} disabled={exporting}>
             {exporting ? <Loader2 className="h-4 w-4 mr-1 animate-spin" /> : <Download className="h-4 w-4 mr-1" />}
             Exportieren
@@ -396,6 +409,38 @@ export default function PresentationEditor() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      {/* Share dialog */}
+      {id && <ShareDialog open={showShareDialog} onOpenChange={setShowShareDialog} presentationId={id} />}
+
+      {/* Save as preset dialog */}
+      <Dialog open={showSavePreset} onOpenChange={setShowSavePreset}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle className="font-heading">Als Vorlage speichern</DialogTitle>
+            <DialogDescription>Speichere die aktuelle Slide-Struktur als wiederverwendbare Vorlage.</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-3">
+            <Input placeholder="Vorlagen-Titel" value={presetTitle} onChange={e => setPresetTitle(e.target.value)} />
+            <Textarea placeholder="Beschreibung (optional)" value={presetDesc} onChange={e => setPresetDesc(e.target.value)} rows={2} />
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowSavePreset(false)}>Abbrechen</Button>
+            <Button disabled={!presetTitle.trim()} onClick={async () => {
+              await supabase.from("presentation_presets").insert({
+                title: presetTitle,
+                description: presetDesc || null,
+                slides_structure: slides as unknown as Json,
+                is_global: false,
+              });
+              setShowSavePreset(false);
+              setPresetTitle("");
+              setPresetDesc("");
+              toast({ title: "Vorlage gespeichert!" });
+            }}>Speichern</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

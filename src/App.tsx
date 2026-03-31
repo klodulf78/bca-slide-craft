@@ -13,6 +13,7 @@ import UploadPage from "./pages/UploadPage";
 import SettingsPage from "./pages/SettingsPage";
 import PresentationDetail from "./pages/PresentationDetail";
 import PresentationEditor from "./pages/PresentationEditor";
+import FromNotionProject from "./pages/FromNotionProject";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -28,6 +29,7 @@ const App = () => (
           <Route path="/login" element={<Login />} />
           <Route path="/" element={<AppLayout><Dashboard /></AppLayout>} />
           <Route path="/new" element={<AppLayout><NewPresentation /></AppLayout>} />
+          <Route path="/new/from-project" element={<AppLayout><FromNotionProject /></AppLayout>} />
           <Route path="/chat" element={<AppLayout><ChatAssistant /></AppLayout>} />
           <Route path="/upload" element={<AppLayout><UploadPage /></AppLayout>} />
           <Route path="/settings" element={<AppLayout><SettingsPage /></AppLayout>} />
