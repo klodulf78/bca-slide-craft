@@ -346,6 +346,11 @@ export default function NewPresentation() {
                         <p className="font-medium text-sm text-foreground">{t.name}</p>
                         <p className="text-xs text-muted-foreground">{t.description}</p>
                       </div>
+                      {(t as any).badge && (
+                        <span className="text-[9px] font-semibold px-1.5 py-0.5 rounded-full bg-primary/10 text-primary ml-auto whitespace-nowrap">
+                          {(t as any).badge}
+                        </span>
+                      )}
                     </div>
                     {selected && (
                       <div className="absolute top-2 right-2 h-5 w-5 bg-primary rounded-full flex items-center justify-center">
