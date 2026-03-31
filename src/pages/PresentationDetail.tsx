@@ -40,6 +40,21 @@ export default function PresentationDetail() {
     navigate("/");
   };
 
+  const handleExport = async () => {
+    if (!id) return;
+    setExporting(true);
+    try {
+      await generatePresentation(slides, presentation.title);
+      await supabase.from("presentations").update({ status: "exported" }).eq("id", id);
+      setPresentation((p: any) => ({ ...p, status: "exported" }));
+      toast({ title: "Präsentation wurde exportiert und heruntergeladen!" });
+    } catch {
+      toast({ title: "Export fehlgeschlagen", description: "Bitte versuche es erneut.", variant: "destructive" });
+    } finally {
+      setExporting(false);
+    }
+  };
+
   if (loading) return <div className="max-w-5xl mx-auto py-8 text-muted-foreground">Laden...</div>;
   if (!presentation) return <div className="max-w-5xl mx-auto py-8 text-muted-foreground">Nicht gefunden.</div>;
 
