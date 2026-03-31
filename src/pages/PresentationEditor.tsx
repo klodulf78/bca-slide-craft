@@ -446,6 +446,9 @@ export default function PresentationEditor() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* Review check dialog */}
+      <ReviewCheckDialog open={showReview} onOpenChange={setShowReview} slides={slides} />
     </div>
   );
 }
