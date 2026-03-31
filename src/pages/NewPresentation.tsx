@@ -75,6 +75,7 @@ export default function NewPresentation() {
   const autoSaveRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const [presets, setPresets] = useState<Preset[]>([]);
   const [presetsLoading, setPresetsLoading] = useState(true);
+  const [attachedFile, setAttachedFile] = useState<ProcessedFile | null>(null);
 
   // Load presets
   useEffect(() => {
