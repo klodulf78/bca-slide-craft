@@ -16,7 +16,7 @@ import {
 import {
   ChevronLeft, ChevronRight, Download, ArrowLeft, Plus, MoreVertical,
   Copy, Trash2, RefreshCw, Loader2, Save, FileText, List, AlignLeft,
-  Columns2, BarChart3, Users, Phone, Check, Share2, Bookmark,
+  Columns2, BarChart3, Users, Phone, Check, Share2, Bookmark, CheckCircle,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { SlidePreview } from "@/components/slides/SlidePreview";
