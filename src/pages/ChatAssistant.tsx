@@ -123,10 +123,21 @@ export default function ChatAssistant() {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const initialMessageSent = useRef(false);
 
-  // Load conversations
+  // Load conversations and project contexts
   useEffect(() => {
     loadConversations();
+    loadRecentProjects();
   }, []);
+
+  // Handle ?message= query param
+  useEffect(() => {
+    const msg = searchParams.get("message");
+    if (msg && !initialMessageSent.current) {
+      initialMessageSent.current = true;
+      setSearchParams({}, { replace: true });
+      setTimeout(() => handleSend(msg), 300);
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
