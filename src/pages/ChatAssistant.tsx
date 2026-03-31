@@ -119,7 +119,9 @@ export default function ChatAssistant() {
   const [conversations, setConversations] = useState<ChatConversation[]>([]);
   const [activeConversationId, setActiveConversationId] = useState<string | null>(null);
   const [slowWarning, setSlowWarning] = useState(false);
-  const [recentProjects, setRecentProjects] = useState<{ project_name: string; presentation_type: string | null }[]>([]);
+  const [recentProjects, setRecentProjects] = useState<{ project_name: string }[]>([]);
+  const [showProjectInput, setShowProjectInput] = useState(false);
+  const [customProjectName, setCustomProjectName] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const initialMessageSent = useRef(false);
@@ -146,11 +148,14 @@ export default function ChatAssistant() {
 
   const loadRecentProjects = async () => {
     const { data } = await supabase
-      .from("project_contexts")
-      .select("project_name, presentation_type")
+      .from("presentations")
+      .select("title")
       .order("updated_at", { ascending: false })
       .limit(5);
-    if (data) setRecentProjects(data);
+    if (data) {
+      const unique = [...new Set(data.map(d => d.title))].map(t => ({ project_name: t }));
+      setRecentProjects(unique.slice(0, 5));
+    }
   };
 
   const loadConversations = async () => {
@@ -443,6 +448,38 @@ export default function ChatAssistant() {
                       {p.project_name}
                     </button>
                   ))}
+                  {!showProjectInput ? (
+                    <button
+                      onClick={() => setShowProjectInput(true)}
+                      className="text-xs px-2 py-1 rounded-full border border-dashed border-muted-foreground text-muted-foreground hover:border-primary hover:text-primary transition-all"
+                    >
+                      + Anderes Projekt
+                    </button>
+                  ) : (
+                    <form
+                      className="flex items-center gap-1"
+                      onSubmit={(e) => {
+                        e.preventDefault();
+                        if (customProjectName.trim()) {
+                          handleSend(`Ich arbeite am Projekt "${customProjectName.trim()}" weiter.`);
+                          setShowProjectInput(false);
+                          setCustomProjectName("");
+                        }
+                      }}
+                    >
+                      <input
+                        autoFocus
+                        value={customProjectName}
+                        onChange={(e) => setCustomProjectName(e.target.value)}
+                        placeholder="Projektname…"
+                        className="text-xs px-2 py-1 rounded-full border border-primary bg-card w-36 focus:outline-none focus:ring-1 focus:ring-primary"
+                        onBlur={() => { if (!customProjectName.trim()) setShowProjectInput(false); }}
+                      />
+                      <button type="submit" className="text-xs text-primary hover:text-primary/80">
+                        <ArrowRight className="h-3 w-3" />
+                      </button>
+                    </form>
+                  )}
                 </div>
               )}
 
