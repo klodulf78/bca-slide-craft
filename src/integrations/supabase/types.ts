@@ -14,6 +14,44 @@ export type Database = {
   }
   public: {
     Tables: {
+      chat_conversations: {
+        Row: {
+          created_at: string | null
+          created_presentation_id: string | null
+          id: string
+          messages: Json | null
+          title: string
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          created_presentation_id?: string | null
+          id?: string
+          messages?: Json | null
+          title?: string
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          created_presentation_id?: string | null
+          id?: string
+          messages?: Json | null
+          title?: string
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chat_conversations_created_presentation_id_fkey"
+            columns: ["created_presentation_id"]
+            isOneToOne: false
+            referencedRelation: "presentations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       presentations: {
         Row: {
           created_at: string
