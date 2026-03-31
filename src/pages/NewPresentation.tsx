@@ -312,6 +312,11 @@ export default function NewPresentation() {
           <CardContent className="space-y-4">
             <Input placeholder="Projektname" value={title} onChange={(e) => setTitle(e.target.value)} className="bg-[hsl(228,33%,98%)]" />
             <Textarea placeholder="Kurze Beschreibung (optional)" value={description} onChange={(e) => setDescription(e.target.value)} rows={3} className="bg-[hsl(228,33%,98%)]" />
+            <div>
+              <p className="text-sm font-medium text-foreground mb-1">Projektdokument anhängen (optional)</p>
+              <p className="text-xs text-muted-foreground mb-2">Lade ein Briefing, einen Report oder Daten hoch — die KI nutzt den Inhalt als Grundlage für die Slides.</p>
+              <FileUploadZone onFileProcessed={setAttachedFile} context="presentation" />
+            </div>
             <Button onClick={() => slidesContent.length > 0 ? setStep(4) : setStep(2)} disabled={!title.trim()}>
               {slidesContent.length > 0 ? "Weiter zu Inhalten" : "Weiter"}
             </Button>
