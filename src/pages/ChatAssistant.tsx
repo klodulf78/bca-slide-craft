@@ -43,10 +43,43 @@ interface ParsedPresentation {
 
 const SUGGESTIONS = [
   { label: "📊 Abschlusspräsentation mit Executive Summary", prompt: "Erstelle eine Abschlusspräsentation mit Executive Summary für ein BCA-Beratungsprojekt" },
-  { label: "Pitch Deck", prompt: "Erstelle ein kurzes Pitch Deck für ein Startup" },
-  { label: "Marktanalyse", prompt: "Erstelle Slides für eine Marktanalyse-Präsentation" },
+  { label: "🚀 Pitch Deck", prompt: "Erstelle ein Pitch Deck für ein Startup" },
+  { label: "📋 Zwischenbericht", prompt: "Erstelle einen Zwischenbericht für ein laufendes Beratungsprojekt" },
   { label: "🔍 Slide-Titel zu Action Titles verbessern", prompt: "Ich habe folgende Slide-Titel. Bitte verbessere sie zu Action Titles nach dem Pyramid Principle: 1. Marktübersicht, 2. Wettbewerbsanalyse, 3. Finanzielle Ergebnisse" },
 ];
+
+const CHOICE_REGEX = /\{"type"\s*:\s*"choices"[\s\S]*?\}\s*\]/g;
+
+function parseChoiceBlocks(text: string): ChoiceBlock[] {
+  const blocks: ChoiceBlock[] = [];
+  // Find JSON objects that look like choice blocks — they may appear outside code fences
+  const matches = text.match(CHOICE_REGEX);
+  if (!matches) return blocks;
+  for (const raw of matches) {
+    // The regex captures up to the last ], but we need the closing }
+    const fullMatch = raw + "}";
+    try {
+      const parsed = JSON.parse(fullMatch);
+      if (parsed.type === "choices" && Array.isArray(parsed.options)) {
+        blocks.push(parsed as ChoiceBlock);
+      }
+    } catch {
+      // Try without the extra }
+      try {
+        const parsed = JSON.parse(raw);
+        if (parsed.type === "choices" && Array.isArray(parsed.options)) {
+          blocks.push(parsed as ChoiceBlock);
+        }
+      } catch { /* skip */ }
+    }
+  }
+  return blocks;
+}
+
+function getTextWithoutChoices(text: string): string {
+  // Remove choice JSON blocks and surrounding whitespace
+  return text.replace(/\{"type"\s*:\s*"choices"[\s\S]*?\}\s*\]\s*\}?/g, "").trim();
+}
 
 function parseJsonFromResponse(text: string): ParsedPresentation | null {
   const match = text.match(/```json\s*([\s\S]*?)\s*```/);
