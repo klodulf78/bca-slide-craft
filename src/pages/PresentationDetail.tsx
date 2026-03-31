@@ -24,6 +24,7 @@ export default function PresentationDetail() {
   const [presentation, setPresentation] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [exporting, setExporting] = useState(false);
+  const [showShare, setShowShare] = useState(false);
 
   useEffect(() => {
     const load = async () => {
