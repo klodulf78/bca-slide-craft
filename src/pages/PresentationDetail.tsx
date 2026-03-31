@@ -4,6 +4,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Pencil, Download, Trash2, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { SlidePreview } from "@/components/slides/SlidePreview";
@@ -55,8 +56,26 @@ export default function PresentationDetail() {
     }
   };
 
-  if (loading) return <div className="max-w-5xl mx-auto py-8 text-muted-foreground">Laden...</div>;
-  if (!presentation) return <div className="max-w-5xl mx-auto py-8 text-muted-foreground">Nicht gefunden.</div>;
+  if (loading) {
+    return (
+      <div className="max-w-5xl mx-auto space-y-6">
+        <Skeleton className="h-10 w-64" />
+        <Skeleton className="h-6 w-48" />
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+          {[1, 2, 3, 4].map(i => <Skeleton key={i} className="aspect-video" />)}
+        </div>
+      </div>
+    );
+  }
+
+  if (!presentation) {
+    return (
+      <div className="max-w-5xl mx-auto py-12 text-center">
+        <p className="text-muted-foreground text-lg">Präsentation nicht gefunden.</p>
+        <Button variant="outline" className="mt-4" onClick={() => navigate("/")}>Zum Dashboard</Button>
+      </div>
+    );
+  }
 
   const slides: SlideContent[] = Array.isArray(presentation.slides_content) ? presentation.slides_content : [];
 
@@ -78,7 +97,6 @@ export default function PresentationDetail() {
         </div>
       </div>
 
-      {/* Slide Gallery */}
       {slides.length > 0 && (
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
           {slides.map((slide, i) => (
@@ -90,10 +108,12 @@ export default function PresentationDetail() {
         </div>
       )}
 
-      {/* Actions */}
-      <div className="flex gap-3">
+      <div className="flex gap-3 flex-wrap">
         <Button onClick={() => navigate("/")} variant="outline">Zurück</Button>
-        <Button onClick={handleExport} disabled={exporting} className="bg-orange-accent hover:bg-orange-accent/90 text-white">
+        <Button onClick={() => navigate(`/presentation/${id}/edit`)}>
+          <Pencil className="h-4 w-4 mr-2" /> Im Editor öffnen
+        </Button>
+        <Button onClick={handleExport} disabled={exporting} variant="cta">
           {exporting ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" /> Wird generiert...</> : <><Download className="h-4 w-4 mr-2" /> Exportieren</>}
         </Button>
         <AlertDialog>

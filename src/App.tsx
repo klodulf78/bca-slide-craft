@@ -3,9 +3,8 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
-// Auth components kept for later re-activation
-// import { AuthGuard } from "@/components/AuthGuard";
 import { AppLayout } from "@/components/AppLayout";
+import { KeyboardShortcuts } from "@/components/KeyboardShortcuts";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import NewPresentation from "./pages/NewPresentation";
@@ -13,6 +12,7 @@ import ChatAssistant from "./pages/ChatAssistant";
 import UploadPage from "./pages/UploadPage";
 import SettingsPage from "./pages/SettingsPage";
 import PresentationDetail from "./pages/PresentationDetail";
+import PresentationEditor from "./pages/PresentationEditor";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -23,6 +23,7 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
+        <KeyboardShortcuts />
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/" element={<AppLayout><Dashboard /></AppLayout>} />
@@ -31,6 +32,7 @@ const App = () => (
           <Route path="/upload" element={<AppLayout><UploadPage /></AppLayout>} />
           <Route path="/settings" element={<AppLayout><SettingsPage /></AppLayout>} />
           <Route path="/presentation/:id" element={<AppLayout><PresentationDetail /></AppLayout>} />
+          <Route path="/presentation/:id/edit" element={<AppLayout><PresentationEditor /></AppLayout>} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
