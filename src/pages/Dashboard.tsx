@@ -1,4 +1,4 @@
-import { Plus, Upload, Clock, Sparkles, ArrowUpCircle, MessageSquare, Pencil, Download, Trash2, Database } from "lucide-react";
+import { Plus, Upload, Clock, Sparkles, ArrowUpCircle, MessageSquare, Pencil, Download, Trash2, Database, Zap } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
