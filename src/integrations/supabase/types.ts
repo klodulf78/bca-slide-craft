@@ -156,6 +156,51 @@ export type Database = {
         }
         Relationships: []
       }
+      project_contexts: {
+        Row: {
+          created_at: string | null
+          id: string
+          industry: string | null
+          key_findings: Json | null
+          last_slide_structure: Json | null
+          presentation_type: string | null
+          project_name: string
+          slide_count: number | null
+          startup_name: string | null
+          team_members: Json | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          industry?: string | null
+          key_findings?: Json | null
+          last_slide_structure?: Json | null
+          presentation_type?: string | null
+          project_name: string
+          slide_count?: number | null
+          startup_name?: string | null
+          team_members?: Json | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          industry?: string | null
+          key_findings?: Json | null
+          last_slide_structure?: Json | null
+          presentation_type?: string | null
+          project_name?: string
+          slide_count?: number | null
+          startup_name?: string | null
+          team_members?: Json | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       templates: {
         Row: {
           category: string
