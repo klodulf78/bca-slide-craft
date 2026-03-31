@@ -5,6 +5,7 @@ import { TwoColumnEditor } from "./TwoColumnEditor";
 import { ChartEditor } from "./ChartEditor";
 import { TeamEditor } from "./TeamEditor";
 import { ContactEditor } from "./ContactEditor";
+import { ExecSummaryEditor } from "./ExecSummaryEditor";
 
 interface Props {
   templateId: string;
@@ -21,6 +22,8 @@ export function SlideEditorFactory({ templateId, content, onChange }: Props) {
     case "chart": return <ChartEditor content={content} onChange={onChange} />;
     case "team": return <TeamEditor content={content} onChange={onChange} />;
     case "contact": return <ContactEditor content={content} onChange={onChange} />;
+    case "exec_summary": return <ExecSummaryEditor content={content} onChange={onChange} />;
     default: return <p className="text-muted-foreground text-sm">Kein Editor für dieses Template verfügbar.</p>;
   }
+}
 }
