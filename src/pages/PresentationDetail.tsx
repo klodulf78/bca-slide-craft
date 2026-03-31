@@ -21,6 +21,7 @@ export default function PresentationDetail() {
   const navigate = useNavigate();
   const [presentation, setPresentation] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [exporting, setExporting] = useState(false);
 
   useEffect(() => {
     const load = async () => {
