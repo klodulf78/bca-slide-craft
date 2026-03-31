@@ -13,16 +13,10 @@ interface Presentation {
 
 export default function Dashboard() {
   const navigate = useNavigate();
-  const [userName, setUserName] = useState("User");
   const [recentPresentations, setRecentPresentations] = useState<Presentation[]>([]);
 
   useEffect(() => {
     const loadData = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (user?.email) {
-        setUserName(user.email.split("@")[0]);
-      }
-
       const { data } = await supabase
         .from("presentations")
         .select("id, title, status, created_at")
