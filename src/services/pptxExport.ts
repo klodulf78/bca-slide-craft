@@ -282,6 +282,7 @@ export async function generatePresentation(
     const slideNum = index + 1;
     switch (slide.template_id) {
       case 'title': renderTitleSlide(pptx, slide.content); break;
+      case 'exec_summary': renderExecSummarySlide(pptx, slide.content, slideNum, totalSlides); break;
       case 'agenda': renderAgendaSlide(pptx, slide.content, slideNum, totalSlides); break;
       case 'content': renderContentSlide(pptx, slide.content, slideNum, totalSlides); break;
       case 'two-column': renderTwoColumnSlide(pptx, slide.content, slideNum, totalSlides); break;
