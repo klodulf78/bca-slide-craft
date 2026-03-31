@@ -1,4 +1,4 @@
-import { Plus, Upload, Clock } from "lucide-react";
+import { Plus, Upload, Clock, Sparkles, ArrowUpCircle } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
