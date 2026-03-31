@@ -280,34 +280,14 @@ export default function NewPresentation() {
         </div>
       )}
 
-      {/* Step 3: Order */}
+      {/* Step 3: Order with Drag & Drop */}
       {step === 3 && (
-        <div className="space-y-4">
-          <p className="text-muted-foreground">Bringe die Slides in die gewünschte Reihenfolge</p>
-          <div className="space-y-2">
-            {orderedTemplates.map((id, index) => {
-              const t = templates.find((tpl) => tpl.id === id)!;
-              return (
-                <Card key={id} className="border-border">
-                  <CardContent className="p-3 flex items-center gap-3">
-                    <GripVertical className="h-4 w-4 text-muted-foreground" />
-                    <span className="text-sm font-medium text-muted-foreground w-6">{index + 1}</span>
-                    <t.icon className="h-4 w-4 text-primary" />
-                    <span className="font-medium text-foreground flex-1">{t.name}</span>
-                    <div className="flex gap-1">
-                      <Button variant="ghost" size="sm" onClick={() => moveTemplate(index, "up")} disabled={index === 0}>↑</Button>
-                      <Button variant="ghost" size="sm" onClick={() => moveTemplate(index, "down")} disabled={index === orderedTemplates.length - 1}>↓</Button>
-                    </div>
-                  </CardContent>
-                </Card>
-              );
-            })}
-          </div>
-          <div className="flex gap-3">
-            <Button variant="outline" onClick={() => setStep(2)}>Zurück</Button>
-            <Button onClick={() => setStep(4)}>Weiter</Button>
-          </div>
-        </div>
+        <Step3Order
+          orderedTemplates={orderedTemplates}
+          setOrderedTemplates={setOrderedTemplates}
+          onBack={() => setStep(2)}
+          onNext={() => setStep(4)}
+        />
       )}
 
       {/* Step 4: Content Editor */}
