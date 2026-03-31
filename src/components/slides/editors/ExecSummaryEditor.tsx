@@ -4,6 +4,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { CharCount } from "./CharCount";
 import { ActionTitleHint } from "./ActionTitleHint";
+import { IconPicker } from "./IconPicker";
 
 interface Props {
   content: Record<string, any>;
@@ -35,6 +36,11 @@ export function ExecSummaryEditor({ content, onChange }: Props) {
           className="bg-[hsl(228,33%,98%)]"
         />
         <CharCount current={content.subtitle?.length || 0} max={100} />
+      </div>
+      <div className="grid grid-cols-3 gap-2">
+        <IconPicker value={content.situation_icon} onChange={(v) => update("situation_icon", v)} subset={["Search", "Globe", "Building", "FileText", "Activity"]} />
+        <IconPicker value={content.complication_icon} onChange={(v) => update("complication_icon", v)} subset={["Shield", "Zap", "Target", "TrendingUp", "Activity"]} />
+        <IconPicker value={content.resolution_icon} onChange={(v) => update("resolution_icon", v)} subset={["Lightbulb", "CheckCircle", "Award", "TrendingUp", "ArrowRight"]} />
       </div>
       <div>
         <Label>Situation (Ausgangslage) *</Label>

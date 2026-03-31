@@ -5,6 +5,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { CharCount } from "./CharCount";
 import { ActionTitleHint } from "./ActionTitleHint";
+import { IconPicker } from "./IconPicker";
 
 interface Props {
   content: Record<string, any>;
@@ -38,6 +39,7 @@ export function TwoColumnEditor({ content, onChange }: Props) {
       )}
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
+          <IconPicker value={content.col1_icon} onChange={(v) => update("col1_icon", v)} subset={["Target", "TrendingUp", "Lightbulb", "Search", "BarChart3", "Users", "Shield", "Globe", "Zap", "CheckCircle"]} />
           <Label>Spalte 1 – Titel</Label>
           <Input value={content.col1_title || ""} onChange={(e) => update("col1_title", e.target.value)} className="bg-[hsl(228,33%,98%)]" />
           <Label>Spalte 1 – Text</Label>
@@ -45,6 +47,7 @@ export function TwoColumnEditor({ content, onChange }: Props) {
           <CharCount current={content.col1_body?.length || 0} max={400} />
         </div>
         <div className="space-y-2">
+          <IconPicker value={content.col2_icon} onChange={(v) => update("col2_icon", v)} subset={["Target", "TrendingUp", "Lightbulb", "Search", "BarChart3", "Users", "Shield", "Globe", "Zap", "CheckCircle"]} />
           <Label>Spalte 2 – Titel</Label>
           <Input value={content.col2_title || ""} onChange={(e) => update("col2_title", e.target.value)} className="bg-[hsl(228,33%,98%)]" />
           <Label>Spalte 2 – Text</Label>

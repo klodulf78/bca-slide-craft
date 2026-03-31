@@ -5,6 +5,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { CharCount } from "./CharCount";
 import { ActionTitleHint } from "./ActionTitleHint";
+import { IconPicker } from "./IconPicker";
 
 interface Props {
   content: Record<string, any>;
@@ -77,6 +78,11 @@ export function ContentEditor({ content, onChange }: Props) {
         />
         <Label htmlFor="as-bullets" className="cursor-pointer">Als Aufzählung formatieren</Label>
       </div>
+      <IconPicker
+        value={content.icon}
+        onChange={(v) => update("icon", v)}
+        subset={["Target", "TrendingUp", "Lightbulb", "Search", "BarChart3", "Users", "Shield", "Globe", "Zap", "CheckCircle"]}
+      />
       <div>
         <Label>Key-Takeaway</Label>
         <Input

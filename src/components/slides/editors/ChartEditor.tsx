@@ -8,6 +8,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Plus, Trash2 } from "lucide-react";
 import { CharCount } from "./CharCount";
 import { ActionTitleHint } from "./ActionTitleHint";
+import { IconPicker } from "./IconPicker";
 
 interface Props {
   content: Record<string, any>;
@@ -103,18 +104,34 @@ export function ChartEditor({ content, onChange }: Props) {
             </Select>
           </div>
           {kpis.slice(0, content.kpi_count || 3).map((kpi: any, i: number) => (
-            <div key={i} className="grid grid-cols-3 gap-2 p-2 bg-muted/30 rounded">
-              <div>
-                <Label className="text-xs">Zahl</Label>
-                <Input value={kpi.value} onChange={(e) => updateKpi(i, "value", e.target.value)} placeholder="42%" className="bg-[hsl(228,33%,98%)]" />
+            <div key={i} className="space-y-1 p-2 bg-muted/30 rounded">
+              <div className="grid grid-cols-3 gap-2">
+                <div>
+                  <Label className="text-xs">Zahl</Label>
+                  <Input value={kpi.value} onChange={(e) => updateKpi(i, "value", e.target.value)} placeholder="42%" className="bg-[hsl(228,33%,98%)]" />
+                </div>
+                <div>
+                  <Label className="text-xs">Label</Label>
+                  <Input value={kpi.label} onChange={(e) => updateKpi(i, "label", e.target.value)} placeholder="Wachstum" className="bg-[hsl(228,33%,98%)]" />
+                </div>
+                <div>
+                  <Label className="text-xs">Sublabel</Label>
+                  <Input value={kpi.sublabel} onChange={(e) => updateKpi(i, "sublabel", e.target.value)} placeholder="YoY" className="bg-[hsl(228,33%,98%)]" />
+                </div>
               </div>
-              <div>
-                <Label className="text-xs">Label</Label>
-                <Input value={kpi.label} onChange={(e) => updateKpi(i, "label", e.target.value)} placeholder="Wachstum" className="bg-[hsl(228,33%,98%)]" />
-              </div>
-              <div>
-                <Label className="text-xs">Sublabel</Label>
-                <Input value={kpi.sublabel} onChange={(e) => updateKpi(i, "sublabel", e.target.value)} placeholder="YoY" className="bg-[hsl(228,33%,98%)]" />
+              <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <Label className="text-xs">Trend</Label>
+                  <Select value={kpi.trend || "neutral"} onValueChange={(v) => updateKpi(i, "trend", v)}>
+                    <SelectTrigger className="bg-[hsl(228,33%,98%)] h-8 text-xs"><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="neutral">– Neutral</SelectItem>
+                      <SelectItem value="up">↑ Positiv</SelectItem>
+                      <SelectItem value="down">↓ Negativ</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <IconPicker value={kpi.icon} onChange={(v) => updateKpi(i, "icon", v)} subset={["TrendingUp", "DollarSign", "Users", "Clock", "Target", "Percent"]} />
               </div>
             </div>
           ))}
