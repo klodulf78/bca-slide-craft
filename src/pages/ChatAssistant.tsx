@@ -281,7 +281,7 @@ export default function ChatAssistant() {
     }
 
     toast({ title: "Präsentation erstellt!", description: `"${pres.title}" wurde als Entwurf gespeichert.` });
-    navigate(`/presentation/${data.id}`);
+    navigate(`/presentation/${data.id}/edit`);
   };
 
   const handleExportPresentation = async (pres: ParsedPresentation) => {

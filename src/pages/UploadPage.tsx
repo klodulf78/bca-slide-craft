@@ -208,7 +208,7 @@ export default function UploadPage() {
       if (error) throw error;
 
       toast({ title: "Übernommen!", description: "Die verbesserte Präsentation wurde gespeichert." });
-      navigate(`/presentation/${data.id}`);
+      navigate(`/presentation/${data.id}/edit`);
     } catch (err) {
       toast({ title: "Fehler", description: "Konnte nicht gespeichert werden.", variant: "destructive" });
     } finally {
