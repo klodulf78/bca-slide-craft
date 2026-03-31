@@ -366,6 +366,70 @@ export default function NewPresentation() {
   );
 }
 
+function Step3Order({ orderedTemplates, setOrderedTemplates, onBack, onNext }: {
+  orderedTemplates: string[];
+  setOrderedTemplates: (t: string[]) => void;
+  onBack: () => void;
+  onNext: () => void;
+}) {
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor)
+  );
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+    if (over && active.id !== over.id) {
+      const oldIndex = orderedTemplates.indexOf(active.id as string);
+      const newIndex = orderedTemplates.indexOf(over.id as string);
+      setOrderedTemplates(arrayMove(orderedTemplates, oldIndex, newIndex));
+    }
+  };
+
+  return (
+    <div className="space-y-4">
+      <p className="text-muted-foreground">Bringe die Slides in die gewünschte Reihenfolge</p>
+      <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+        <SortableContext items={orderedTemplates} strategy={verticalListSortingStrategy}>
+          <div className="space-y-2">
+            {orderedTemplates.map((id, index) => (
+              <SortableSlideItem key={id} id={id} index={index} />
+            ))}
+          </div>
+        </SortableContext>
+      </DndContext>
+      <div className="flex gap-3">
+        <Button variant="outline" onClick={onBack}>Zurück</Button>
+        <Button onClick={onNext}>Weiter</Button>
+      </div>
+    </div>
+  );
+}
+
+function SortableSlideItem({ id, index }: { id: string; index: number }) {
+  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id });
+  const t = templates.find((tpl) => tpl.id === id)!;
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  };
+
+  return (
+    <div ref={setNodeRef} style={style}>
+      <Card className="border-border">
+        <CardContent className="p-3 flex items-center gap-3">
+          <button type="button" {...attributes} {...listeners} className="cursor-grab active:cursor-grabbing text-muted-foreground p-1" aria-label="Slide verschieben">
+            <GripVertical className="h-4 w-4" />
+          </button>
+          <span className="text-sm font-medium text-muted-foreground w-6">{index + 1}</span>
+          <t.icon className="h-4 w-4 text-primary" />
+          <span className="font-medium text-foreground flex-1">{t.name}</span>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
+
 function getDefaultContent(templateId: string): Record<string, any> {
   switch (templateId) {
     case "title": return { title: "", subtitle: "", date: new Date().toISOString().split("T")[0], team_name: "", dark_variant: false };
