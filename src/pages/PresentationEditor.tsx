@@ -28,6 +28,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { ShareDialog } from "@/components/ShareDialog";
 import { Textarea } from "@/components/ui/textarea";
 import type { Json } from "@/integrations/supabase/types";
+import { ReviewCheckDialog } from "@/components/ReviewCheckDialog";
 
 interface SlideContent {
   template_id: string;
