@@ -97,7 +97,7 @@ function renderContentSlide(pptx: PptxGenJS, content: Record<string, any>, slide
       slide.addText(line, {
         x: 0.5, y: bodyY + i * 0.4, w: 9.0, h: 0.35,
         fontSize: 12, fontFace: BCA_FONTS.body, color: BCA_COLORS.textSecondary,
-        bullet: { type: 'bullet', color: BCA_COLORS.midblue },
+        bullet: { type: 'bullet' },
         valign: 'top',
       });
     });
