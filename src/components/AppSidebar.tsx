@@ -22,7 +22,6 @@ const navItems = [
   { title: "Chat-Assistent", url: "/chat", icon: MessageSquare },
   { title: "Upload", url: "/upload", icon: Upload },
   { title: "Einstellungen", url: "/settings", icon: Settings },
-  { title: "Carls LinkedIn Builder", url: "/linkedin", icon: Linkedin },
   { title: "Carlettos Projekt", url: "/carlettos-projekt", icon: FolderOpen },
 ];
 
