@@ -1,4 +1,4 @@
-import { Plus, Upload, Clock } from "lucide-react";
+import { Plus, Upload, Clock, Sparkles, ArrowUpCircle } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -10,6 +10,7 @@ interface Presentation {
   status: string;
   created_at: string;
   slides_content: any;
+  source?: string;
 }
 
 export default function Dashboard() {
@@ -20,7 +21,7 @@ export default function Dashboard() {
     const loadData = async () => {
       const { data } = await supabase
         .from("presentations")
-        .select("id, title, status, created_at, slides_content")
+        .select("id, title, status, created_at, slides_content, source")
         .order("created_at", { ascending: false })
         .limit(5);
 
@@ -94,7 +95,15 @@ export default function Dashboard() {
               >
                 <CardContent className="py-4 flex items-center justify-between">
                   <div>
-                    <p className="font-medium text-foreground">{p.title}</p>
+                    <div className="flex items-center gap-2">
+                      <p className="font-medium text-foreground">{p.title}</p>
+                      {p.source === "chat" && (
+                        <span className="inline-flex items-center gap-1 text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-primary/10 text-primary"><Sparkles className="h-2.5 w-2.5" />KI</span>
+                      )}
+                      {p.source === "upload" && (
+                        <span className="inline-flex items-center gap-1 text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-accent text-accent-foreground"><ArrowUpCircle className="h-2.5 w-2.5" />Verbessert</span>
+                      )}
+                    </div>
                     <p className="text-sm text-muted-foreground">
                       {new Date(p.created_at).toLocaleDateString("de-DE")}
                       {Array.isArray(p.slides_content) && p.slides_content.length > 0 && (
