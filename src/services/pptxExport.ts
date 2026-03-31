@@ -156,7 +156,7 @@ function renderChartDataSlide(pptx: PptxGenJS, content: Record<string, any>, sli
   const layout = content.layout || 'kpi';
 
   if (layout === 'kpi') {
-    const kpis: { value: string; label: string; sublabel: string }[] = content.kpis || [];
+    const kpis: { value: string; label: string; sublabel: string; trend?: string; icon?: string }[] = content.kpis || [];
     const count = kpis.length || 3;
     const totalWidth = 9.0;
     const gutter = 0.15;
