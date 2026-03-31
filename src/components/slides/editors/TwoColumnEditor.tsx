@@ -39,6 +39,7 @@ export function TwoColumnEditor({ content, onChange }: Props) {
       )}
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
+          <IconPicker value={content.col1_icon} onChange={(v) => update("col1_icon", v)} subset={["Target", "TrendingUp", "Lightbulb", "Search", "BarChart3", "Users", "Shield", "Globe", "Zap", "CheckCircle"]} />
           <Label>Spalte 1 – Titel</Label>
           <Input value={content.col1_title || ""} onChange={(e) => update("col1_title", e.target.value)} className="bg-[hsl(228,33%,98%)]" />
           <Label>Spalte 1 – Text</Label>
