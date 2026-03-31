@@ -180,11 +180,18 @@ Content-Schema pro Template:
 - title: title, subtitle, date, team_name, dark_variant (boolean)
 - exec_summary: section_header ("EXECUTIVE SUMMARY"), title (required, Action Title, max 80), subtitle (optional, max 100), situation (required, max 300), complication (required, max 300), resolution (required, max 300), key_takeaway (optional, max 120)
 - agenda: items (string array), active_item (number|null)
-- content: section_header, title, subtitle (optional, max 100), body, as_bullets (boolean), takeaway
-- two-column: section_header, title, subtitle (optional, max 100), col1_title, col1_body, col2_title, col2_body
-- chart: section_header, title, subtitle (optional, max 100), layout ("kpi"|"chart"), kpi_count (number), kpis [{value, label, sublabel}], chart_type ("bar"|"line"|"pie"|"donut"), annotations [{text (max 60), position ("top_right"|"top_left"|"bottom_right"|"bottom_left")}], source
+- content: section_header, title, subtitle (optional, max 100), body, as_bullets (boolean), takeaway, icon (optional, z.B. "Target", "TrendingUp")
+- two-column: section_header, title, subtitle (optional, max 100), col1_title, col1_body, col1_icon (optional), col2_title, col2_body, col2_icon (optional)
+- chart: section_header, title, subtitle (optional, max 100), layout ("kpi"|"chart"), kpi_count (number), kpis [{value, label, sublabel, trend ("up"|"down"|"neutral"), icon (optional)}], chart_type ("bar"|"line"|"pie"|"donut"), annotations [{text (max 60), position ("top_right"|"top_left"|"bottom_right"|"bottom_left")}], source
 - team: title, members [{name, role, university}]
 - contact: thanks, subtitle, email, website, linkedin, contact_person, dark_variant (boolean)
+
+=== PIKTOGRAMME ===
+Du kannst optional ein "icon"-Feld pro Slide-Element vorschlagen.
+Verwende Icons NUR wenn sie den Inhalt verdeutlichen, nicht als Dekoration.
+Maximal 3-4 Icons pro Slide. Bei Zweifeln: kein Icon.
+Verfügbare Icons: Target, TrendingUp, Lightbulb, Search, BarChart3, Users, Shield, Globe, Zap, CheckCircle, DollarSign, Clock, Percent, ArrowRight, Building, Briefcase, FileText, PieChart, Activity, Award
+KPI-Karten: Nutze "trend": "up"|"down" um positive/negative Entwicklungen zu kennzeichnen.
 
 Subtitle-Typen: Datenquelle, Zeitraum/Scope, Methodik, Einordnung.
 
