@@ -46,6 +46,7 @@ interface Preset {
 function getRequiredFields(templateId: string): string[] {
   switch (templateId) {
     case "title": return ["title"];
+    case "exec_summary": return ["title", "situation", "complication", "resolution"];
     case "content": return ["title"];
     case "two-column": return ["title"];
     case "chart": return ["title"];
