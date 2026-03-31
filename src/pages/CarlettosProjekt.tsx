@@ -7,6 +7,7 @@ export default function CarlettosProjekt() {
 
   const subPages = [
     { title: "Carls LinkedIn Builder", description: "Erstelle und optimiere LinkedIn-Posts mit KI", icon: Linkedin, path: "/carlettos-projekt/linkedin" },
+    { title: "Carls Buchhaltungstool", description: "Einnahmen, Ausgaben und Belege verwalten", icon: Calculator, path: "/carlettos-projekt/buchhaltung" },
   ];
 
   return (
