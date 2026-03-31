@@ -5,11 +5,12 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Pencil, Download, Trash2, Loader2 } from "lucide-react";
+import { Pencil, Download, Trash2, Loader2, Share2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { SlidePreview } from "@/components/slides/SlidePreview";
 import { toast } from "@/hooks/use-toast";
 import { generatePresentation } from "@/services/pptxExport";
+import { ShareDialog } from "@/components/ShareDialog";
 
 interface SlideContent {
   template_id: string;
