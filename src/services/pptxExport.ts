@@ -12,7 +12,7 @@ interface SlideContent {
 // ── Footer ──────────────────────────────────────────────
 function addFooter(slide: PptxGenJS.Slide, slideNumber: number, totalSlides: number) {
   slide.addShape('line', { x: 0.5, y: 5.2, w: 9.0, h: 0, line: { color: BCA_COLORS.divider, width: 0.75 } });
-  slide.addText('BCA Slide Studio', { x: 0.5, y: 5.25, w: 4, h: 0.25, fontSize: 8, fontFace: BCA_FONTS.body, color: BCA_COLORS.textSecondary });
+  slide.addImage({ data: `image/png;base64,${LOGO_BLUE_BASE64}`, x: 0.5, y: 5.25, h: 0.3, w: 0.69, sizing: { type: 'contain', w: 0.69, h: 0.3 } });
   slide.addText(`${slideNumber} / ${totalSlides}`, { x: 7.5, y: 5.25, w: 2.0, h: 0.25, fontSize: 8, fontFace: BCA_FONTS.body, color: BCA_COLORS.textSecondary, align: 'right' });
 }
 
