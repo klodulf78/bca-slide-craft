@@ -1,4 +1,4 @@
-import { FolderOpen, Linkedin } from "lucide-react";
+import { FolderOpen, Linkedin, Calculator } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 
@@ -7,6 +7,7 @@ export default function CarlettosProjekt() {
 
   const subPages = [
     { title: "Carls LinkedIn Builder", description: "Erstelle und optimiere LinkedIn-Posts mit KI", icon: Linkedin, path: "/carlettos-projekt/linkedin" },
+    { title: "Carls Buchhaltungstool", description: "Einnahmen, Ausgaben und Belege verwalten", icon: Calculator, path: "/carlettos-projekt/buchhaltung" },
   ];
 
   return (

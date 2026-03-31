@@ -15,6 +15,7 @@ import PresentationDetail from "./pages/PresentationDetail";
 import PresentationEditor from "./pages/PresentationEditor";
 import FromNotionProject from "./pages/FromNotionProject";
 import LinkedinBuilder from "./pages/LinkedinBuilder";
+import Buchhaltungstool from "./pages/Buchhaltungstool";
 import CarlettosProjekt from "./pages/CarlettosProjekt";
 import NotFound from "./pages/NotFound";
 
@@ -39,6 +40,7 @@ const App = () => (
           <Route path="/presentation/:id/edit" element={<AppLayout><PresentationEditor /></AppLayout>} />
           <Route path="/carlettos-projekt" element={<AppLayout><CarlettosProjekt /></AppLayout>} />
           <Route path="/carlettos-projekt/linkedin" element={<AppLayout><LinkedinBuilder /></AppLayout>} />
+          <Route path="/carlettos-projekt/buchhaltung" element={<AppLayout><Buchhaltungstool /></AppLayout>} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
