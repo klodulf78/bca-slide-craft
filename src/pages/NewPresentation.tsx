@@ -12,6 +12,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { SlidePreview } from "@/components/slides/SlidePreview";
 import { SlideEditorFactory } from "@/components/slides/editors/SlideEditorFactory";
 import { toast } from "@/hooks/use-toast";
+import { generatePresentation } from "@/services/pptxExport";
 import type { Json } from "@/integrations/supabase/types";
 
 const templates = [
@@ -146,28 +147,34 @@ export default function NewPresentation() {
 
   const handleExport = async () => {
     setLoading(true);
-    const payload = {
-      title,
-      description: description || null,
-      selected_templates: orderedTemplates as unknown as Json,
-      slides_content: slidesContent as unknown as Json,
-      status: "exported",
-    };
+    try {
+      const payload = {
+        title,
+        description: description || null,
+        selected_templates: orderedTemplates as unknown as Json,
+        slides_content: slidesContent as unknown as Json,
+        status: "exported",
+      };
 
-    let result;
-    if (savedId) {
-      result = await supabase.from("presentations").update(payload).eq("id", savedId).select().single();
-    } else {
-      result = await supabase.from("presentations").insert(payload).select().single();
-    }
+      let result;
+      if (savedId) {
+        result = await supabase.from("presentations").update(payload).eq("id", savedId).select().single();
+      } else {
+        result = await supabase.from("presentations").insert(payload).select().single();
+      }
 
-    setLoading(false);
-    if (!result.error) {
+      if (result.error) throw result.error;
+
+      await generatePresentation(slidesContent, title);
+
       toast({
-        title: "Export-Funktion wird in Kürze freigeschaltet",
-        description: "Deine Präsentation wurde als Entwurf gespeichert.",
+        title: "Präsentation wurde exportiert und heruntergeladen!",
       });
       navigate("/");
+    } catch {
+      toast({ title: "Export fehlgeschlagen", description: "Bitte versuche es erneut.", variant: "destructive" });
+    } finally {
+      setLoading(false);
     }
   };
 

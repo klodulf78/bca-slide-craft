@@ -4,10 +4,11 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
-import { Pencil, Download, Trash2 } from "lucide-react";
+import { Pencil, Download, Trash2, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { SlidePreview } from "@/components/slides/SlidePreview";
 import { toast } from "@/hooks/use-toast";
+import { generatePresentation } from "@/services/pptxExport";
 
 interface SlideContent {
   template_id: string;
@@ -20,6 +21,7 @@ export default function PresentationDetail() {
   const navigate = useNavigate();
   const [presentation, setPresentation] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [exporting, setExporting] = useState(false);
 
   useEffect(() => {
     const load = async () => {
@@ -36,6 +38,21 @@ export default function PresentationDetail() {
     await supabase.from("presentations").delete().eq("id", id);
     toast({ title: "Präsentation gelöscht" });
     navigate("/");
+  };
+
+  const handleExport = async () => {
+    if (!id) return;
+    setExporting(true);
+    try {
+      await generatePresentation(slides, presentation.title);
+      await supabase.from("presentations").update({ status: "exported" }).eq("id", id);
+      setPresentation((p: any) => ({ ...p, status: "exported" }));
+      toast({ title: "Präsentation wurde exportiert und heruntergeladen!" });
+    } catch {
+      toast({ title: "Export fehlgeschlagen", description: "Bitte versuche es erneut.", variant: "destructive" });
+    } finally {
+      setExporting(false);
+    }
   };
 
   if (loading) return <div className="max-w-5xl mx-auto py-8 text-muted-foreground">Laden...</div>;
@@ -76,8 +93,8 @@ export default function PresentationDetail() {
       {/* Actions */}
       <div className="flex gap-3">
         <Button onClick={() => navigate("/")} variant="outline">Zurück</Button>
-        <Button onClick={() => toast({ title: "Export-Funktion wird in Kürze freigeschaltet" })} className="bg-orange-accent hover:bg-orange-accent/90 text-white">
-          <Download className="h-4 w-4 mr-2" /> Exportieren
+        <Button onClick={handleExport} disabled={exporting} className="bg-orange-accent hover:bg-orange-accent/90 text-white">
+          {exporting ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" /> Wird generiert...</> : <><Download className="h-4 w-4 mr-2" /> Exportieren</>}
         </Button>
         <AlertDialog>
           <AlertDialogTrigger asChild>
