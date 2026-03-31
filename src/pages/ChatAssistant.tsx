@@ -148,11 +148,14 @@ export default function ChatAssistant() {
 
   const loadRecentProjects = async () => {
     const { data } = await supabase
-      .from("project_contexts")
-      .select("project_name, presentation_type")
+      .from("presentations")
+      .select("title")
       .order("updated_at", { ascending: false })
       .limit(5);
-    if (data) setRecentProjects(data);
+    if (data) {
+      const unique = [...new Set(data.map(d => d.title))].map(t => ({ project_name: t }));
+      setRecentProjects(unique.slice(0, 5));
+    }
   };
 
   const loadConversations = async () => {
