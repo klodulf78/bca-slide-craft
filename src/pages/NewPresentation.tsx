@@ -205,41 +205,97 @@ export default function NewPresentation() {
     navigate("/");
   };
 
+  const usePreset = (preset: Preset) => {
+    const slides = Array.isArray(preset.slides_structure) ? preset.slides_structure : [];
+    setSlidesContent(slides.map((s: any, i: number) => ({
+      template_id: s.template_id,
+      order: i + 1,
+      content: s.content || {},
+    })));
+    setOrderedTemplates(slides.map((s: any) => s.template_id));
+    setSelectedTemplates(slides.map((s: any) => s.template_id));
+    setStep(1); // go to details, then skip to step 4
+  };
+
   const completedSlides = slidesContent.filter((s) => isSlideComplete(s.template_id, s.content)).length;
 
   return (
     <div className="max-w-5xl mx-auto space-y-6">
       <h1 className="text-3xl font-heading font-bold text-foreground">Neue Präsentation</h1>
 
-      {/* Stepper */}
-      <div className="flex items-center gap-1 text-sm flex-wrap">
-        {stepLabels.map((label, i) => {
-          const s = i + 1;
-          return (
-            <div key={s} className="flex items-center gap-1">
-              <div className="flex flex-col items-center">
-                <div className={`h-8 w-8 rounded-full flex items-center justify-center text-sm font-medium ${
-                  step >= s ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"
-                }`}>
-                  {step > s ? <Check className="h-4 w-4" /> : s}
-                </div>
-                <span className="text-[10px] text-muted-foreground mt-0.5">{label}</span>
-              </div>
-              {s < 5 && <div className={`w-8 h-0.5 mb-4 ${step > s ? "bg-primary" : "bg-muted"}`} />}
+      {/* Step 0: Preset selection */}
+      {step === 0 && (
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="text-lg font-heading font-semibold text-foreground flex items-center gap-2">
+                <LayoutTemplate className="h-5 w-5 text-primary" /> Von Vorlage starten
+              </h2>
+              <p className="text-sm text-muted-foreground">Wähle eine vorgefertigte Slide-Struktur als Startpunkt</p>
             </div>
-          );
-        })}
-        {step === 4 && (
-          <div className="ml-auto text-xs text-muted-foreground">
-            {completedSlides} von {slidesContent.length} Slides ausgefüllt
-            {lastSaved && (
-              <span className="ml-2 text-green-600">
-                <Save className="h-3 w-3 inline mr-0.5" />Gespeichert ✓
-              </span>
-            )}
+            <Button variant="link" onClick={() => setStep(1)}>Oder leer starten →</Button>
           </div>
-        )}
-      </div>
+          {presetsLoading ? (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {[1, 2, 3].map(i => <Skeleton key={i} className="h-32" />)}
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {presets.map(p => (
+                <Card
+                  key={p.id}
+                  className="cursor-pointer hover:shadow-md hover:scale-[1.01] transition-all duration-200 border-border"
+                  onClick={() => usePreset(p)}
+                >
+                  <CardHeader className="p-4">
+                    <div className="flex items-center gap-2">
+                      <CardTitle className="text-sm font-heading">{p.title}</CardTitle>
+                      {p.is_global && (
+                        <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-primary/10 text-primary">BCA Standard</span>
+                      )}
+                    </div>
+                    <CardDescription className="text-xs">
+                      {p.description} · {Array.isArray(p.slides_structure) ? p.slides_structure.length : 0} Slides
+                    </CardDescription>
+                  </CardHeader>
+                </Card>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Stepper (visible from step 1+) */}
+      {step >= 1 && (
+        <div className="flex items-center gap-1 text-sm flex-wrap">
+          {stepLabels.map((label, i) => {
+            const s = i + 1;
+            return (
+              <div key={s} className="flex items-center gap-1">
+                <div className="flex flex-col items-center">
+                  <div className={`h-8 w-8 rounded-full flex items-center justify-center text-sm font-medium ${
+                    step >= s ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"
+                  }`}>
+                    {step > s ? <Check className="h-4 w-4" /> : s}
+                  </div>
+                  <span className="text-[10px] text-muted-foreground mt-0.5">{label}</span>
+                </div>
+                {s < 5 && <div className={`w-8 h-0.5 mb-4 ${step > s ? "bg-primary" : "bg-muted"}`} />}
+              </div>
+            );
+          })}
+          {step === 4 && (
+            <div className="ml-auto text-xs text-muted-foreground">
+              {completedSlides} von {slidesContent.length} Slides ausgefüllt
+              {lastSaved && (
+                <span className="ml-2 text-green-600">
+                  <Save className="h-3 w-3 inline mr-0.5" />Gespeichert ✓
+                </span>
+              )}
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Step 1: Details */}
       {step === 1 && (
