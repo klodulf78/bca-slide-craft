@@ -12,6 +12,7 @@ import NewPresentation from "./pages/NewPresentation";
 import ChatAssistant from "./pages/ChatAssistant";
 import UploadPage from "./pages/UploadPage";
 import SettingsPage from "./pages/SettingsPage";
+import PresentationDetail from "./pages/PresentationDetail";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -29,6 +30,7 @@ const App = () => (
           <Route path="/chat" element={<AppLayout><ChatAssistant /></AppLayout>} />
           <Route path="/upload" element={<AppLayout><UploadPage /></AppLayout>} />
           <Route path="/settings" element={<AppLayout><SettingsPage /></AppLayout>} />
+          <Route path="/presentation/:id" element={<AppLayout><PresentationDetail /></AppLayout>} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

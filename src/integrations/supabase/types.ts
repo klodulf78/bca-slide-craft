@@ -20,6 +20,7 @@ export type Database = {
           description: string | null
           id: string
           selected_templates: Json | null
+          slides_content: Json | null
           status: string
           title: string
           updated_at: string
@@ -30,6 +31,7 @@ export type Database = {
           description?: string | null
           id?: string
           selected_templates?: Json | null
+          slides_content?: Json | null
           status?: string
           title: string
           updated_at?: string
@@ -40,6 +42,7 @@ export type Database = {
           description?: string | null
           id?: string
           selected_templates?: Json | null
+          slides_content?: Json | null
           status?: string
           title?: string
           updated_at?: string
