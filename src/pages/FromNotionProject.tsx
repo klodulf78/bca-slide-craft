@@ -123,7 +123,9 @@ Team: ${teamStr || "[Nicht angegeben]"}
 Kontakt: ${data.contactPerson || "[Nicht angegeben]"}, ${data.contactEmail || "[Nicht angegeben]"}
 
 Nutze die Vorlage "${selectedPreset.title}" als Grundstruktur und fülle sie mit den Projektdaten.
-Verwende echte Daten wo verfügbar und Platzhalter [in eckigen Klammern] wo Daten fehlen.`;
+Verwende echte Daten wo verfügbar und Platzhalter [in eckigen Klammern] wo Daten fehlen.${
+  attachedFile ? "\n\n" + formatFileContext(attachedFile) : ""
+}`;
 
     try {
       const { data: fnData, error } = await supabase.functions.invoke("generate-slides", {
