@@ -5,6 +5,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Check, GripVertical, FileText, List, AlignLeft, Columns2, BarChart3, Users, Phone, Save } from "lucide-react";
+import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, DragEndEvent } from "@dnd-kit/core";
+import { arrayMove, SortableContext, useSortable, verticalListSortingStrategy } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 import { supabase } from "@/integrations/supabase/client";
 import { SlidePreview } from "@/components/slides/SlidePreview";
 import { SlideEditorFactory } from "@/components/slides/editors/SlideEditorFactory";
@@ -277,34 +280,14 @@ export default function NewPresentation() {
         </div>
       )}
 
-      {/* Step 3: Order */}
+      {/* Step 3: Order with Drag & Drop */}
       {step === 3 && (
-        <div className="space-y-4">
-          <p className="text-muted-foreground">Bringe die Slides in die gewünschte Reihenfolge</p>
-          <div className="space-y-2">
-            {orderedTemplates.map((id, index) => {
-              const t = templates.find((tpl) => tpl.id === id)!;
-              return (
-                <Card key={id} className="border-border">
-                  <CardContent className="p-3 flex items-center gap-3">
-                    <GripVertical className="h-4 w-4 text-muted-foreground" />
-                    <span className="text-sm font-medium text-muted-foreground w-6">{index + 1}</span>
-                    <t.icon className="h-4 w-4 text-primary" />
-                    <span className="font-medium text-foreground flex-1">{t.name}</span>
-                    <div className="flex gap-1">
-                      <Button variant="ghost" size="sm" onClick={() => moveTemplate(index, "up")} disabled={index === 0}>↑</Button>
-                      <Button variant="ghost" size="sm" onClick={() => moveTemplate(index, "down")} disabled={index === orderedTemplates.length - 1}>↓</Button>
-                    </div>
-                  </CardContent>
-                </Card>
-              );
-            })}
-          </div>
-          <div className="flex gap-3">
-            <Button variant="outline" onClick={() => setStep(2)}>Zurück</Button>
-            <Button onClick={() => setStep(4)}>Weiter</Button>
-          </div>
-        </div>
+        <Step3Order
+          orderedTemplates={orderedTemplates}
+          setOrderedTemplates={setOrderedTemplates}
+          onBack={() => setStep(2)}
+          onNext={() => setStep(4)}
+        />
       )}
 
       {/* Step 4: Content Editor */}
@@ -379,6 +362,70 @@ export default function NewPresentation() {
           </div>
         </div>
       )}
+    </div>
+  );
+}
+
+function Step3Order({ orderedTemplates, setOrderedTemplates, onBack, onNext }: {
+  orderedTemplates: string[];
+  setOrderedTemplates: (t: string[]) => void;
+  onBack: () => void;
+  onNext: () => void;
+}) {
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor)
+  );
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+    if (over && active.id !== over.id) {
+      const oldIndex = orderedTemplates.indexOf(active.id as string);
+      const newIndex = orderedTemplates.indexOf(over.id as string);
+      setOrderedTemplates(arrayMove(orderedTemplates, oldIndex, newIndex));
+    }
+  };
+
+  return (
+    <div className="space-y-4">
+      <p className="text-muted-foreground">Bringe die Slides in die gewünschte Reihenfolge</p>
+      <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+        <SortableContext items={orderedTemplates} strategy={verticalListSortingStrategy}>
+          <div className="space-y-2">
+            {orderedTemplates.map((id, index) => (
+              <SortableSlideItem key={id} id={id} index={index} />
+            ))}
+          </div>
+        </SortableContext>
+      </DndContext>
+      <div className="flex gap-3">
+        <Button variant="outline" onClick={onBack}>Zurück</Button>
+        <Button onClick={onNext}>Weiter</Button>
+      </div>
+    </div>
+  );
+}
+
+function SortableSlideItem({ id, index }: { id: string; index: number }) {
+  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id });
+  const t = templates.find((tpl) => tpl.id === id)!;
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  };
+
+  return (
+    <div ref={setNodeRef} style={style}>
+      <Card className="border-border">
+        <CardContent className="p-3 flex items-center gap-3">
+          <button type="button" {...attributes} {...listeners} className="cursor-grab active:cursor-grabbing text-muted-foreground p-1" aria-label="Slide verschieben">
+            <GripVertical className="h-4 w-4" />
+          </button>
+          <span className="text-sm font-medium text-muted-foreground w-6">{index + 1}</span>
+          <t.icon className="h-4 w-4 text-primary" />
+          <span className="font-medium text-foreground flex-1">{t.name}</span>
+        </CardContent>
+      </Card>
     </div>
   );
 }
