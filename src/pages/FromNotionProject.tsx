@@ -66,6 +66,7 @@ export default function FromNotionProject() {
     team: [{ name: "", role: "Project Lead", university: "" }],
     contactPerson: "", contactEmail: "",
   });
+  const [attachedFile, setAttachedFile] = useState<ProcessedFile | null>(null);
 
   useEffect(() => {
     supabase.from("presentation_presets").select("*").eq("is_global", true)
