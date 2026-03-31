@@ -143,6 +143,15 @@ export default function ChatAssistant() {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
+  const loadRecentProjects = async () => {
+    const { data } = await supabase
+      .from("project_contexts")
+      .select("project_name, presentation_type")
+      .order("updated_at", { ascending: false })
+      .limit(5);
+    if (data) setRecentProjects(data);
+  };
+
   const loadConversations = async () => {
     const { data } = await supabase
       .from("chat_conversations")
