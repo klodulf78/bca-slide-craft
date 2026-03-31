@@ -255,6 +255,7 @@ function ContactPreview({ content }: { content: Record<string, any> }) {
   const dark = content.dark_variant;
   return (
     <div className={cn("flex-1 flex flex-col items-center justify-center text-center gap-0.5 rounded", dark ? "bg-[#010038]" : "")}>
+      <img src={dark ? "/bca-logo-white.svg" : "/bca-logo-blue.svg"} alt="BCA" className="h-3 w-auto mb-0.5" />
       <p className={cn("text-[7px] font-bold", dark ? "text-white" : "text-[#010038]")}>
         {content.thanks || "Vielen Dank!"}
       </p>
