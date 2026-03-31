@@ -345,6 +345,22 @@ export default function ChatAssistant() {
         .eq("id", activeConversationId);
     }
 
+    // Save project context
+    try {
+      const teamSlide = pres.slides.find(s => s.template_id === "team");
+      await supabase.from("project_contexts").upsert({
+        project_name: pres.title,
+        presentation_type: pres.slides.some(s => s.template_id === "exec_summary") ? "abschluss" : "pitch",
+        slide_count: pres.total_slides,
+        team_members: teamSlide?.content?.members || [],
+        last_slide_structure: pres.slides.map(s => ({
+          slide_number: s.slide_number,
+          template_id: s.template_id,
+          title: s.content?.title || "",
+        })) as unknown as Json,
+      }, { onConflict: "project_name" });
+    } catch { /* non-critical */ }
+
     toast({ title: "Präsentation erstellt!", description: `"${pres.title}" wurde als Entwurf gespeichert.` });
     navigate(`/presentation/${data.id}/edit`);
   };
