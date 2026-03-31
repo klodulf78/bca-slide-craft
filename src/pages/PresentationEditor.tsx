@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter,
 } from "@/components/ui/dialog";
@@ -15,7 +16,7 @@ import {
 import {
   ChevronLeft, ChevronRight, Download, ArrowLeft, Plus, MoreVertical,
   Copy, Trash2, RefreshCw, Loader2, Save, FileText, List, AlignLeft,
-  Columns2, BarChart3, Users, Phone, Check,
+  Columns2, BarChart3, Users, Phone, Check, Share2, Bookmark,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { SlidePreview } from "@/components/slides/SlidePreview";
@@ -24,6 +25,8 @@ import { generatePresentation } from "@/services/pptxExport";
 import { toast } from "@/hooks/use-toast";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { ShareDialog } from "@/components/ShareDialog";
+import { Textarea } from "@/components/ui/textarea";
 import type { Json } from "@/integrations/supabase/types";
 
 interface SlideContent {
