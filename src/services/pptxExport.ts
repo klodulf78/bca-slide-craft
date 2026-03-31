@@ -14,7 +14,7 @@ function addFooter(slide: PptxGenJS.Slide, slideNumber: number, totalSlides: num
   slide.addText(`${slideNumber} / ${totalSlides}`, { x: 7.5, y: 5.25, w: 2.0, h: 0.25, fontSize: 8, fontFace: BCA_FONTS.body, color: BCA_COLORS.textSecondary, align: 'right' });
 }
 
-// ── Section header + title + cyan line (shared) ─────────
+// ── Section header + title + subtitle + cyan line (shared) ─
 function addSectionHeader(slide: PptxGenJS.Slide, content: Record<string, any>) {
   let titleY = 0.5;
   if (content.section_header?.trim()) {
@@ -22,8 +22,15 @@ function addSectionHeader(slide: PptxGenJS.Slide, content: Record<string, any>) 
     titleY = 1.0;
   }
   slide.addText(content.title || '', { x: 0.5, y: titleY, w: 9.0, h: 0.55, fontSize: 24, fontFace: BCA_FONTS.heading, color: BCA_COLORS.navy, bold: true, shrinkText: true });
-  slide.addShape('line', { x: 0.5, y: titleY + 0.65, w: 9.0, h: 0, line: { color: BCA_COLORS.cyan, width: 2 } });
-  return titleY + 0.65;
+
+  const hasSubtitle = !!content.subtitle?.trim();
+  const subtitleOffset = hasSubtitle ? 0.05 : 0;
+  if (hasSubtitle) {
+    slide.addText(content.subtitle, { x: 0.5, y: titleY + 0.55, w: 9.0, h: 0.2, fontSize: 11, fontFace: BCA_FONTS.body, color: BCA_COLORS.textSecondary, valign: 'top' });
+  }
+  const lineY = titleY + 0.65 + subtitleOffset;
+  slide.addShape('line', { x: 0.5, y: lineY, w: 9.0, h: 0, line: { color: BCA_COLORS.cyan, width: 2 } });
+  return lineY;
 }
 
 // ── 1. Title Slide ──────────────────────────────────────
