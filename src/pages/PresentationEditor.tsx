@@ -409,6 +409,38 @@ export default function PresentationEditor() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      {/* Share dialog */}
+      {id && <ShareDialog open={showShareDialog} onOpenChange={setShowShareDialog} presentationId={id} />}
+
+      {/* Save as preset dialog */}
+      <Dialog open={showSavePreset} onOpenChange={setShowSavePreset}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle className="font-heading">Als Vorlage speichern</DialogTitle>
+            <DialogDescription>Speichere die aktuelle Slide-Struktur als wiederverwendbare Vorlage.</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-3">
+            <Input placeholder="Vorlagen-Titel" value={presetTitle} onChange={e => setPresetTitle(e.target.value)} />
+            <Textarea placeholder="Beschreibung (optional)" value={presetDesc} onChange={e => setPresetDesc(e.target.value)} rows={2} />
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowSavePreset(false)}>Abbrechen</Button>
+            <Button disabled={!presetTitle.trim()} onClick={async () => {
+              await supabase.from("presentation_presets").insert({
+                title: presetTitle,
+                description: presetDesc || null,
+                slides_structure: slides as unknown as Json,
+                is_global: false,
+              });
+              setShowSavePreset(false);
+              setPresetTitle("");
+              setPresetDesc("");
+              toast({ title: "Vorlage gespeichert!" });
+            }}>Speichern</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
