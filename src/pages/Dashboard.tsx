@@ -10,6 +10,7 @@ interface Presentation {
   status: string;
   created_at: string;
   slides_content: any;
+  source?: string;
 }
 
 export default function Dashboard() {
