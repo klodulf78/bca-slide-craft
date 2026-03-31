@@ -1,4 +1,4 @@
-import { Home, Plus, MessageSquare, Upload, Settings, Database } from "lucide-react";
+import { Home, Plus, MessageSquare, Upload, Settings, Database, Linkedin, FolderOpen } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useEffect, useState } from "react";
 import {
