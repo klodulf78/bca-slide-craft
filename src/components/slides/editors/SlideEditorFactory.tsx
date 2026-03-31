@@ -26,4 +26,3 @@ export function SlideEditorFactory({ templateId, content, onChange }: Props) {
     default: return <p className="text-muted-foreground text-sm">Kein Editor für dieses Template verfügbar.</p>;
   }
 }
-}
