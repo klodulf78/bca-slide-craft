@@ -309,6 +309,7 @@ export default function NewPresentation() {
             <Textarea placeholder="Kurze Beschreibung (optional)" value={description} onChange={(e) => setDescription(e.target.value)} rows={3} className="bg-[hsl(228,33%,98%)]" />
             <Button onClick={() => slidesContent.length > 0 ? setStep(4) : setStep(2)} disabled={!title.trim()}>
               {slidesContent.length > 0 ? "Weiter zu Inhalten" : "Weiter"}
+            </Button>
           </CardContent>
         </Card>
       )}
