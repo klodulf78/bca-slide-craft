@@ -76,6 +76,7 @@ export default function PresentationEditor() {
   const [pendingNavigation, setPendingNavigation] = useState<string | null>(null);
   const [showShareDialog, setShowShareDialog] = useState(false);
   const [showSavePreset, setShowSavePreset] = useState(false);
+  const [showReview, setShowReview] = useState(false);
   const [presetTitle, setPresetTitle] = useState("");
   const [presetDesc, setPresetDesc] = useState("");
   const autoSaveRef = useRef<ReturnType<typeof setTimeout> | null>(null);
