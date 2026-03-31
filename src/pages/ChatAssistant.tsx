@@ -218,7 +218,14 @@ export default function ChatAssistant() {
     const messageText = (text || input).trim();
     if (!messageText || isLoading) return;
 
-    const userMsg: Message = { role: "user", content: messageText };
+    // Append file context if attached
+    let fullMessage = messageText;
+    if (attachedFile) {
+      fullMessage += "\n\n" + formatFileContext(attachedFile);
+      setAttachedFile(null);
+    }
+
+    const userMsg: Message = { role: "user", content: fullMessage };
     const updatedMessages = [...messages, userMsg];
     setMessages(updatedMessages);
     setInput("");
