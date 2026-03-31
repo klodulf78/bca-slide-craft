@@ -14,7 +14,66 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      presentations: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          selected_templates: Json | null
+          status: string
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          selected_templates?: Json | null
+          status?: string
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          selected_templates?: Json | null
+          status?: string
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      templates: {
+        Row: {
+          category: string
+          description: string
+          id: string
+          name: string
+          preview_config: Json | null
+          sort_order: number
+        }
+        Insert: {
+          category: string
+          description: string
+          id?: string
+          name: string
+          preview_config?: Json | null
+          sort_order?: number
+        }
+        Update: {
+          category?: string
+          description?: string
+          id?: string
+          name?: string
+          preview_config?: Json | null
+          sort_order?: number
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
