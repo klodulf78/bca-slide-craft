@@ -23,6 +23,13 @@ interface ChatConversation {
   updated_at: string;
 }
 
+interface ChoiceBlock {
+  type: "choices";
+  question: string;
+  options: { label: string; description?: string; value: string }[];
+  allow_multiple?: boolean;
+}
+
 interface ParsedPresentation {
   title: string;
   total_slides: number;
@@ -36,10 +43,43 @@ interface ParsedPresentation {
 
 const SUGGESTIONS = [
   { label: "📊 Abschlusspräsentation mit Executive Summary", prompt: "Erstelle eine Abschlusspräsentation mit Executive Summary für ein BCA-Beratungsprojekt" },
-  { label: "Pitch Deck", prompt: "Erstelle ein kurzes Pitch Deck für ein Startup" },
-  { label: "Marktanalyse", prompt: "Erstelle Slides für eine Marktanalyse-Präsentation" },
+  { label: "🚀 Pitch Deck", prompt: "Erstelle ein Pitch Deck für ein Startup" },
+  { label: "📋 Zwischenbericht", prompt: "Erstelle einen Zwischenbericht für ein laufendes Beratungsprojekt" },
   { label: "🔍 Slide-Titel zu Action Titles verbessern", prompt: "Ich habe folgende Slide-Titel. Bitte verbessere sie zu Action Titles nach dem Pyramid Principle: 1. Marktübersicht, 2. Wettbewerbsanalyse, 3. Finanzielle Ergebnisse" },
 ];
+
+const CHOICE_REGEX = /\{"type"\s*:\s*"choices"[\s\S]*?\}\s*\]/g;
+
+function parseChoiceBlocks(text: string): ChoiceBlock[] {
+  const blocks: ChoiceBlock[] = [];
+  // Find JSON objects that look like choice blocks — they may appear outside code fences
+  const matches = text.match(CHOICE_REGEX);
+  if (!matches) return blocks;
+  for (const raw of matches) {
+    // The regex captures up to the last ], but we need the closing }
+    const fullMatch = raw + "}";
+    try {
+      const parsed = JSON.parse(fullMatch);
+      if (parsed.type === "choices" && Array.isArray(parsed.options)) {
+        blocks.push(parsed as ChoiceBlock);
+      }
+    } catch {
+      // Try without the extra }
+      try {
+        const parsed = JSON.parse(raw);
+        if (parsed.type === "choices" && Array.isArray(parsed.options)) {
+          blocks.push(parsed as ChoiceBlock);
+        }
+      } catch { /* skip */ }
+    }
+  }
+  return blocks;
+}
+
+function getTextWithoutChoices(text: string): string {
+  // Remove choice JSON blocks and surrounding whitespace
+  return text.replace(/\{"type"\s*:\s*"choices"[\s\S]*?\}\s*\]\s*\}?/g, "").trim();
+}
 
 function parseJsonFromResponse(text: string): ParsedPresentation | null {
   const match = text.match(/```json\s*([\s\S]*?)\s*```/);
@@ -373,7 +413,9 @@ export default function ChatAssistant() {
             <>
               {messages.map((msg, i) => {
                 const presentation = msg.role === "assistant" ? parseJsonFromResponse(msg.content) : null;
-                const textContent = msg.role === "assistant" ? getTextWithoutJson(msg.content) : msg.content;
+                const rawText = msg.role === "assistant" ? getTextWithoutJson(msg.content) : msg.content;
+                const choiceBlocks = msg.role === "assistant" ? parseChoiceBlocks(rawText) : [];
+                const textContent = msg.role === "assistant" ? getTextWithoutChoices(rawText) : rawText;
 
                 return (
                   <div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
@@ -393,6 +435,30 @@ export default function ChatAssistant() {
                           {textContent}
                         </div>
                       )}
+
+                      {/* Choice blocks */}
+                      {choiceBlocks.map((choice, ci) => (
+                        <div key={ci} className="space-y-2">
+                          <p className="text-sm font-medium text-foreground">{choice.question}</p>
+                          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                            {choice.options.map((opt, oi) => (
+                              <button
+                                key={oi}
+                                onClick={() => handleSend(opt.value)}
+                                disabled={isLoading}
+                                className="text-left p-3 rounded-lg border border-border bg-secondary hover:border-primary hover:shadow-sm transition-all disabled:opacity-50"
+                              >
+                                <p className="font-semibold text-xs text-foreground" style={{ fontFamily: "Raleway, sans-serif" }}>
+                                  {opt.label}
+                                </p>
+                                {opt.description && (
+                                  <p className="text-[11px] text-muted-foreground mt-0.5">{opt.description}</p>
+                                )}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      ))}
 
                       {/* Presentation preview card */}
                       {presentation && (
