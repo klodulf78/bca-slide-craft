@@ -57,8 +57,10 @@ export type Database = {
           created_at: string
           description: string | null
           id: string
+          original_file_url: string | null
           selected_templates: Json | null
           slides_content: Json | null
+          source: string | null
           status: string
           title: string
           updated_at: string
@@ -68,8 +70,10 @@ export type Database = {
           created_at?: string
           description?: string | null
           id?: string
+          original_file_url?: string | null
           selected_templates?: Json | null
           slides_content?: Json | null
+          source?: string | null
           status?: string
           title: string
           updated_at?: string
@@ -79,8 +83,10 @@ export type Database = {
           created_at?: string
           description?: string | null
           id?: string
+          original_file_url?: string | null
           selected_templates?: Json | null
           slides_content?: Json | null
+          source?: string | null
           status?: string
           title?: string
           updated_at?: string
