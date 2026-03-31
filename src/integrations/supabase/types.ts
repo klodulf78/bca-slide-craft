@@ -52,6 +52,68 @@ export type Database = {
           },
         ]
       }
+      presentation_collaborators: {
+        Row: {
+          added_at: string | null
+          id: string
+          presentation_id: string | null
+          role: string | null
+          user_email: string
+        }
+        Insert: {
+          added_at?: string | null
+          id?: string
+          presentation_id?: string | null
+          role?: string | null
+          user_email: string
+        }
+        Update: {
+          added_at?: string | null
+          id?: string
+          presentation_id?: string | null
+          role?: string | null
+          user_email?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "presentation_collaborators_presentation_id_fkey"
+            columns: ["presentation_id"]
+            isOneToOne: false
+            referencedRelation: "presentations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      presentation_presets: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          id: string
+          is_global: boolean | null
+          slides_structure: Json
+          title: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          is_global?: boolean | null
+          slides_structure: Json
+          title: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          is_global?: boolean | null
+          slides_structure?: Json
+          title?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       presentations: {
         Row: {
           created_at: string
