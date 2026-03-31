@@ -47,7 +47,7 @@ export default function Dashboard() {
     <div className="max-w-5xl mx-auto space-y-8">
       <div>
         <h1 className="text-3xl font-heading font-bold text-foreground">
-          Willkommen, {userName}
+          Willkommen bei BCA Slide Studio
         </h1>
         <p className="text-muted-foreground mt-1">
           Erstelle und verwalte deine Projekt-Präsentationen
