@@ -1,8 +1,10 @@
+import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { CharCount } from "./CharCount";
+import { ActionTitleHint } from "./ActionTitleHint";
 
 interface Props {
   content: Record<string, any>;
@@ -11,6 +13,7 @@ interface Props {
 
 export function TwoColumnEditor({ content, onChange }: Props) {
   const update = (key: string, value: any) => onChange({ ...content, [key]: value });
+  const [showSubtitle, setShowSubtitle] = useState(!!content.subtitle);
 
   return (
     <div className="space-y-3">
@@ -22,7 +25,17 @@ export function TwoColumnEditor({ content, onChange }: Props) {
         <Label>Slide-Titel *</Label>
         <Input value={content.title || ""} onChange={(e) => update("title", e.target.value.slice(0, 80))} placeholder="Titel" className="bg-[hsl(228,33%,98%)]" />
         <CharCount current={content.title?.length || 0} max={80} />
+        <ActionTitleHint title={content.title || ""} />
       </div>
+      {showSubtitle ? (
+        <div>
+          <Label>Subtitle / Kontext</Label>
+          <Input value={content.subtitle || ""} onChange={(e) => update("subtitle", e.target.value.slice(0, 100))} placeholder="z.B. Quelle: Statista, 2025 | DACH-Region" className="bg-[hsl(228,33%,98%)]" />
+          <CharCount current={content.subtitle?.length || 0} max={100} />
+        </div>
+      ) : (
+        <button type="button" onClick={() => setShowSubtitle(true)} className="text-xs text-primary hover:underline">+ Subtitle hinzufügen</button>
+      )}
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
           <Label>Spalte 1 – Titel</Label>
