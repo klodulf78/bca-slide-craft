@@ -413,7 +413,9 @@ export default function ChatAssistant() {
             <>
               {messages.map((msg, i) => {
                 const presentation = msg.role === "assistant" ? parseJsonFromResponse(msg.content) : null;
-                const textContent = msg.role === "assistant" ? getTextWithoutJson(msg.content) : msg.content;
+                const rawText = msg.role === "assistant" ? getTextWithoutJson(msg.content) : msg.content;
+                const choiceBlocks = msg.role === "assistant" ? parseChoiceBlocks(rawText) : [];
+                const textContent = msg.role === "assistant" ? getTextWithoutChoices(rawText) : rawText;
 
                 return (
                   <div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
@@ -433,6 +435,30 @@ export default function ChatAssistant() {
                           {textContent}
                         </div>
                       )}
+
+                      {/* Choice blocks */}
+                      {choiceBlocks.map((choice, ci) => (
+                        <div key={ci} className="space-y-2">
+                          <p className="text-sm font-medium text-foreground">{choice.question}</p>
+                          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                            {choice.options.map((opt, oi) => (
+                              <button
+                                key={oi}
+                                onClick={() => handleSend(opt.value)}
+                                disabled={isLoading}
+                                className="text-left p-3 rounded-lg border border-border bg-secondary hover:border-primary hover:shadow-sm transition-all disabled:opacity-50"
+                              >
+                                <p className="font-semibold text-xs text-foreground" style={{ fontFamily: "Raleway, sans-serif" }}>
+                                  {opt.label}
+                                </p>
+                                {opt.description && (
+                                  <p className="text-[11px] text-muted-foreground mt-0.5">{opt.description}</p>
+                                )}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      ))}
 
                       {/* Presentation preview card */}
                       {presentation && (
