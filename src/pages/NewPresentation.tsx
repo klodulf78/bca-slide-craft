@@ -18,6 +18,7 @@ import type { Json } from "@/integrations/supabase/types";
 
 const templates = [
   { id: "title", name: "Titelslide", description: "Projektname + BCA Logo + Datum", icon: FileText, colors: ["bg-primary", "bg-cyan-accent"] },
+  { id: "exec_summary", name: "Executive Summary", description: "Zusammenfassung der Ergebnisse in SCR-Struktur", icon: FileText, colors: ["bg-medium-blue", "bg-primary"], badge: "Empfohlen" },
   { id: "agenda", name: "Agenda", description: "Nummerierte Themenliste", icon: List, colors: ["bg-medium-blue", "bg-muted"] },
   { id: "content", name: "Content", description: "Überschrift + Fließtext + Bild", icon: AlignLeft, colors: ["bg-muted", "bg-primary"] },
   { id: "two-column", name: "Zwei-Spalter", description: "Zwei Inhaltsbereiche nebeneinander", icon: Columns2, colors: ["bg-brand-blue", "bg-brand-blue"] },
