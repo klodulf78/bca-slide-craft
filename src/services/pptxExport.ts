@@ -166,8 +166,25 @@ function renderChartDataSlide(pptx: PptxGenJS, content: Record<string, any>, sli
       const x = 0.5 + i * (cardW + gutter);
       const y = lineY + 0.35;
       slide.addShape('rect', { x, y, w: cardW, h: 2.2, fill: { color: BCA_COLORS.lightBg }, rectRadius: 0.06 });
+      // Gradient-style accent bar
       slide.addShape('rect', { x, y, w: cardW, h: 0.04, fill: { color: BCA_COLORS.blue } });
-      slide.addText(kpi.value || '', { x, y: y + 0.3, w: cardW, h: 0.7, fontSize: 40, fontFace: BCA_FONTS.heading, bold: true, color: BCA_COLORS.blue, align: 'center' });
+      // Optional icon
+      const iconUni = kpi.icon && ICON_UNICODE[kpi.icon];
+      if (iconUni) {
+        slide.addText(iconUni, { x, y: y + 0.15, w: cardW, h: 0.25, fontSize: 14, align: 'center', color: BCA_COLORS.blue });
+      }
+      const valueY = iconUni ? y + 0.4 : y + 0.3;
+      // KPI value with optional trend
+      const trendSymbol = kpi.trend === 'up' ? ' ↑' : kpi.trend === 'down' ? ' ↓' : '';
+      const trendColor = kpi.trend === 'up' ? '10B981' : kpi.trend === 'down' ? 'EF4444' : BCA_COLORS.blue;
+      if (trendSymbol) {
+        slide.addText([
+          { text: kpi.value || '', options: { fontSize: 44, fontFace: BCA_FONTS.heading, bold: true, color: BCA_COLORS.blue } },
+          { text: trendSymbol, options: { fontSize: 20, fontFace: BCA_FONTS.body, bold: true, color: trendColor } },
+        ], { x, y: valueY, w: cardW, h: 0.7, align: 'center' });
+      } else {
+        slide.addText(kpi.value || '', { x, y: valueY, w: cardW, h: 0.7, fontSize: 44, fontFace: BCA_FONTS.heading, bold: true, color: BCA_COLORS.blue, align: 'center' });
+      }
       slide.addText(kpi.label || '', { x, y: y + 1.1, w: cardW, h: 0.4, fontSize: 11, fontFace: BCA_FONTS.body, color: BCA_COLORS.textSecondary, align: 'center' });
       slide.addText(kpi.sublabel || '', { x, y: y + 1.5, w: cardW, h: 0.35, fontSize: 9, fontFace: BCA_FONTS.body, color: BCA_COLORS.textSecondary, align: 'center' });
     });
