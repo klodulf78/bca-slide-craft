@@ -30,6 +30,7 @@ const App = () => (
           <Route path="/chat" element={<AppLayout><ChatAssistant /></AppLayout>} />
           <Route path="/upload" element={<AppLayout><UploadPage /></AppLayout>} />
           <Route path="/settings" element={<AppLayout><SettingsPage /></AppLayout>} />
+          <Route path="/presentation/:id" element={<AppLayout><PresentationDetail /></AppLayout>} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

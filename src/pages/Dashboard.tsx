@@ -87,16 +87,23 @@ export default function Dashboard() {
         ) : (
           <div className="space-y-3">
             {recentPresentations.map((p) => (
-              <Card key={p.id} className="border-border hover:shadow-sm transition-shadow">
+              <Card
+                key={p.id}
+                className="border-border hover:shadow-sm transition-shadow cursor-pointer"
+                onClick={() => navigate(`/presentation/${p.id}`)}
+              >
                 <CardContent className="py-4 flex items-center justify-between">
                   <div>
                     <p className="font-medium text-foreground">{p.title}</p>
                     <p className="text-sm text-muted-foreground">
                       {new Date(p.created_at).toLocaleDateString("de-DE")}
+                      {Array.isArray(p.slides_content) && p.slides_content.length > 0 && (
+                        <span className="ml-2">· {p.slides_content.length} Slides</span>
+                      )}
                     </p>
                   </div>
                   <span className="text-xs px-2 py-1 rounded-full bg-muted text-muted-foreground capitalize">
-                    {p.status}
+                    {p.status === "exported" ? "Exportiert" : p.status}
                   </span>
                 </CardContent>
               </Card>
