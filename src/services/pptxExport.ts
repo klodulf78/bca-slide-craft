@@ -43,7 +43,8 @@ function renderTitleSlide(pptx: PptxGenJS, content: Record<string, any>) {
   const slide = pptx.addSlide();
   slide.background = { fill: bg };
 
-  slide.addText('BCA', { x: 3.75, y: 0.6, w: 2.5, h: 0.6, fontSize: 24, fontFace: BCA_FONTS.heading, bold: true, color: textColor, align: 'center' });
+  const logoData = dark ? LOGO_WHITE_BASE64 : LOGO_BLUE_BASE64;
+  slide.addImage({ data: `image/png;base64,${logoData}`, x: 3.85, y: 0.4, h: 0.9, w: 2.07, sizing: { type: 'contain', w: 2.07, h: 0.9 } });
   slide.addShape('line', { x: 3.0, y: 1.75, w: 4.0, h: 0, line: { color: BCA_COLORS.cyan, width: 2 } });
   slide.addText(content.title || '', { x: 0.5, y: 2.0, w: 9.0, h: 0.75, fontSize: 32, fontFace: BCA_FONTS.heading, bold: true, color: textColor, align: 'center', shrinkText: true });
 
