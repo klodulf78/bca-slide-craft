@@ -16,7 +16,7 @@ import {
 import {
   ChevronLeft, ChevronRight, Download, ArrowLeft, Plus, MoreVertical,
   Copy, Trash2, RefreshCw, Loader2, Save, FileText, List, AlignLeft,
-  Columns2, BarChart3, Users, Phone, Check, Share2, Bookmark,
+  Columns2, BarChart3, Users, Phone, Check, Share2, Bookmark, CheckCircle,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { SlidePreview } from "@/components/slides/SlidePreview";
@@ -28,6 +28,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { ShareDialog } from "@/components/ShareDialog";
 import { Textarea } from "@/components/ui/textarea";
 import type { Json } from "@/integrations/supabase/types";
+import { ReviewCheckDialog } from "@/components/ReviewCheckDialog";
 
 interface SlideContent {
   template_id: string;
@@ -75,6 +76,7 @@ export default function PresentationEditor() {
   const [pendingNavigation, setPendingNavigation] = useState<string | null>(null);
   const [showShareDialog, setShowShareDialog] = useState(false);
   const [showSavePreset, setShowSavePreset] = useState(false);
+  const [showReview, setShowReview] = useState(false);
   const [presetTitle, setPresetTitle] = useState("");
   const [presetDesc, setPresetDesc] = useState("");
   const autoSaveRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -259,6 +261,9 @@ export default function PresentationEditor() {
           <Button size="sm" variant="ghost" onClick={() => setShowShareDialog(true)} title="Teilen">
             <Share2 className="h-4 w-4" />
           </Button>
+          <Button size="sm" variant="outline" onClick={() => setShowReview(true)} title="Review-Check">
+            <CheckCircle className="h-4 w-4 mr-1" /> Review
+          </Button>
           <Button size="sm" variant="cta" onClick={handleExport} disabled={exporting}>
             {exporting ? <Loader2 className="h-4 w-4 mr-1 animate-spin" /> : <Download className="h-4 w-4 mr-1" />}
             Exportieren
@@ -441,6 +446,9 @@ export default function PresentationEditor() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* Review check dialog */}
+      <ReviewCheckDialog open={showReview} onOpenChange={setShowReview} slides={slides} />
     </div>
   );
 }

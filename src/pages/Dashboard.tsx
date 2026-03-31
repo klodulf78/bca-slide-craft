@@ -1,4 +1,4 @@
-import { Plus, Upload, Clock, Sparkles, ArrowUpCircle, MessageSquare, Pencil, Download, Trash2, Database } from "lucide-react";
+import { Plus, Upload, Clock, Sparkles, ArrowUpCircle, MessageSquare, Pencil, Download, Trash2, Database, Zap } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
@@ -65,6 +65,7 @@ export default function Dashboard() {
     { title: "Upload & Analyse", description: "Lade eine .pptx-Datei zur KI-Analyse hoch", icon: Upload, onClick: () => navigate("/upload") },
     { title: "Per KI erstellen", description: "Beschreibe dein Projekt und die KI erstellt Slides", icon: MessageSquare, onClick: () => navigate("/chat") },
     { title: "Aus Projekt erstellen", description: "Nutze Daten aus eurem Projekt für Slides", icon: Database, onClick: () => navigate("/new/from-project") },
+    { title: "Quick Update", description: "Kurzes Status-Update für den nächsten Kunden-Call", icon: Zap, onClick: () => navigate("/chat?message=" + encodeURIComponent("Erstelle ein kurzes Status-Update für meinen nächsten Kunden-Call (3-5 Slides).")) },
   ];
 
   return (

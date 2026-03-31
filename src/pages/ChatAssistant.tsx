@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Send, MessageSquare, Plus, Loader2, Sparkles, FileDown, ArrowRight, Trash2 } from "lucide-react";
+import { Send, MessageSquare, Plus, Loader2, Sparkles, FileDown, ArrowRight, Trash2, FolderOpen, Zap } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { SlidePreview } from "@/components/slides/SlidePreview";
 import { generatePresentation } from "@/services/pptxExport";
@@ -45,6 +45,7 @@ const SUGGESTIONS = [
   { label: "📊 Abschlusspräsentation mit Executive Summary", prompt: "Erstelle eine Abschlusspräsentation mit Executive Summary für ein BCA-Beratungsprojekt" },
   { label: "🚀 Pitch Deck", prompt: "Erstelle ein Pitch Deck für ein Startup" },
   { label: "📋 Zwischenbericht", prompt: "Erstelle einen Zwischenbericht für ein laufendes Beratungsprojekt" },
+  { label: "⚡ Quick Update", prompt: "Erstelle ein kurzes Status-Update für meinen nächsten Kunden-Call (3-5 Slides)." },
   { label: "🔍 Slide-Titel zu Action Titles verbessern", prompt: "Ich habe folgende Slide-Titel. Bitte verbessere sie zu Action Titles nach dem Pyramid Principle: 1. Marktübersicht, 2. Wettbewerbsanalyse, 3. Finanzielle Ergebnisse" },
 ];
 
@@ -110,6 +111,7 @@ const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/generate-sli
 
 export default function ChatAssistant() {
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -117,17 +119,39 @@ export default function ChatAssistant() {
   const [conversations, setConversations] = useState<ChatConversation[]>([]);
   const [activeConversationId, setActiveConversationId] = useState<string | null>(null);
   const [slowWarning, setSlowWarning] = useState(false);
+  const [recentProjects, setRecentProjects] = useState<{ project_name: string; presentation_type: string | null }[]>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const initialMessageSent = useRef(false);
 
-  // Load conversations
+  // Load conversations and project contexts
   useEffect(() => {
     loadConversations();
+    loadRecentProjects();
   }, []);
+
+  // Handle ?message= query param
+  useEffect(() => {
+    const msg = searchParams.get("message");
+    if (msg && !initialMessageSent.current) {
+      initialMessageSent.current = true;
+      setSearchParams({}, { replace: true });
+      setTimeout(() => handleSend(msg), 300);
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+
+  const loadRecentProjects = async () => {
+    const { data } = await supabase
+      .from("project_contexts")
+      .select("project_name, presentation_type")
+      .order("updated_at", { ascending: false })
+      .limit(5);
+    if (data) setRecentProjects(data);
+  };
 
   const loadConversations = async () => {
     const { data } = await supabase
@@ -321,6 +345,22 @@ export default function ChatAssistant() {
         .eq("id", activeConversationId);
     }
 
+    // Save project context
+    try {
+      const teamSlide = pres.slides.find(s => s.template_id === "team");
+      await supabase.from("project_contexts").upsert({
+        project_name: pres.title,
+        presentation_type: pres.slides.some(s => s.template_id === "exec_summary") ? "abschluss" : "pitch",
+        slide_count: pres.total_slides,
+        team_members: teamSlide?.content?.members || [],
+        last_slide_structure: pres.slides.map(s => ({
+          slide_number: s.slide_number,
+          template_id: s.template_id,
+          title: s.content?.title || "",
+        })) as unknown as Json,
+      }, { onConflict: "project_name" });
+    } catch { /* non-critical */ }
+
     toast({ title: "Präsentation erstellt!", description: `"${pres.title}" wurde als Entwurf gespeichert.` });
     navigate(`/presentation/${data.id}/edit`);
   };
@@ -389,6 +429,23 @@ export default function ChatAssistant() {
         <div className="flex-1 overflow-y-auto p-6 space-y-4">
           {showSuggestions ? (
             <div className="flex-1 flex flex-col items-center justify-center h-full gap-6">
+              {/* Recent projects bar */}
+              {recentProjects.length > 0 && (
+                <div className="flex items-center gap-2 flex-wrap justify-center">
+                  <FolderOpen className="h-4 w-4 text-muted-foreground" />
+                  <span className="text-xs text-muted-foreground">Letzte Projekte:</span>
+                  {recentProjects.map((p) => (
+                    <button
+                      key={p.project_name}
+                      onClick={() => handleSend(`Ich arbeite am Projekt "${p.project_name}" weiter.`)}
+                      className="text-xs px-2 py-1 rounded-full border border-border bg-card hover:border-primary hover:shadow-sm transition-all"
+                    >
+                      {p.project_name}
+                    </button>
+                  ))}
+                </div>
+              )}
+
               <div className="text-center space-y-2">
                 <Sparkles className="h-10 w-10 mx-auto text-primary opacity-60" />
                 <h2 className="text-xl font-semibold text-foreground">BCA Slide-Assistent</h2>
