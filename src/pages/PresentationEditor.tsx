@@ -73,6 +73,10 @@ export default function PresentationEditor() {
   const [hasChanges, setHasChanges] = useState(false);
   const [showLeaveDialog, setShowLeaveDialog] = useState(false);
   const [pendingNavigation, setPendingNavigation] = useState<string | null>(null);
+  const [showShareDialog, setShowShareDialog] = useState(false);
+  const [showSavePreset, setShowSavePreset] = useState(false);
+  const [presetTitle, setPresetTitle] = useState("");
+  const [presetDesc, setPresetDesc] = useState("");
   const autoSaveRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const slideStripRef = useRef<HTMLDivElement>(null);
 
