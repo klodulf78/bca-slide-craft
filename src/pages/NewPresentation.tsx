@@ -12,6 +12,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { SlidePreview } from "@/components/slides/SlidePreview";
 import { SlideEditorFactory } from "@/components/slides/editors/SlideEditorFactory";
 import { toast } from "@/hooks/use-toast";
+import { generatePresentation } from "@/services/pptxExport";
 import type { Json } from "@/integrations/supabase/types";
 
 const templates = [
