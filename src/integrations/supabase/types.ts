@@ -121,6 +121,51 @@ export type Database = {
         }
         Relationships: []
       }
+      user_settings: {
+        Row: {
+          created_at: string | null
+          default_contact_email: string | null
+          default_linkedin: string | null
+          default_team_name: string | null
+          default_variant: string | null
+          default_website: string | null
+          first_name: string | null
+          footer_text: string | null
+          id: string
+          last_name: string | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          default_contact_email?: string | null
+          default_linkedin?: string | null
+          default_team_name?: string | null
+          default_variant?: string | null
+          default_website?: string | null
+          first_name?: string | null
+          footer_text?: string | null
+          id?: string
+          last_name?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          default_contact_email?: string | null
+          default_linkedin?: string | null
+          default_team_name?: string | null
+          default_variant?: string | null
+          default_website?: string | null
+          first_name?: string | null
+          footer_text?: string | null
+          id?: string
+          last_name?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
