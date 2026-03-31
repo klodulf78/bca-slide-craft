@@ -13,16 +13,10 @@ interface Presentation {
 
 export default function Dashboard() {
   const navigate = useNavigate();
-  const [userName, setUserName] = useState("User");
   const [recentPresentations, setRecentPresentations] = useState<Presentation[]>([]);
 
   useEffect(() => {
     const loadData = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (user?.email) {
-        setUserName(user.email.split("@")[0]);
-      }
-
       const { data } = await supabase
         .from("presentations")
         .select("id, title, status, created_at")
@@ -53,7 +47,7 @@ export default function Dashboard() {
     <div className="max-w-5xl mx-auto space-y-8">
       <div>
         <h1 className="text-3xl font-heading font-bold text-foreground">
-          Willkommen, {userName}
+          Willkommen bei BCA Slide Studio
         </h1>
         <p className="text-muted-foreground mt-1">
           Erstelle und verwalte deine Projekt-Präsentationen

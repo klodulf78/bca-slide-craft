@@ -69,6 +69,7 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
 
+      {/* Logout button hidden during development
       <SidebarFooter className="border-t border-border p-3">
         <button
           onClick={handleLogout}
@@ -78,6 +79,7 @@ export function AppSidebar() {
           {!collapsed && <span>Abmelden</span>}
         </button>
       </SidebarFooter>
+      */}
     </Sidebar>
   );
 }
