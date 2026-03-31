@@ -5,6 +5,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { CharCount } from "./CharCount";
 import { ActionTitleHint } from "./ActionTitleHint";
+import { IconPicker } from "./IconPicker";
 
 interface Props {
   content: Record<string, any>;
