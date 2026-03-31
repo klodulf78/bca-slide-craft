@@ -119,7 +119,9 @@ export default function ChatAssistant() {
   const [conversations, setConversations] = useState<ChatConversation[]>([]);
   const [activeConversationId, setActiveConversationId] = useState<string | null>(null);
   const [slowWarning, setSlowWarning] = useState(false);
-  const [recentProjects, setRecentProjects] = useState<{ project_name: string; presentation_type: string | null }[]>([]);
+  const [recentProjects, setRecentProjects] = useState<{ project_name: string }[]>([]);
+  const [showProjectInput, setShowProjectInput] = useState(false);
+  const [customProjectName, setCustomProjectName] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const initialMessageSent = useRef(false);
