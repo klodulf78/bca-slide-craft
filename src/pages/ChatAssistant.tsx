@@ -45,6 +45,7 @@ const SUGGESTIONS = [
   { label: "📊 Abschlusspräsentation mit Executive Summary", prompt: "Erstelle eine Abschlusspräsentation mit Executive Summary für ein BCA-Beratungsprojekt" },
   { label: "🚀 Pitch Deck", prompt: "Erstelle ein Pitch Deck für ein Startup" },
   { label: "📋 Zwischenbericht", prompt: "Erstelle einen Zwischenbericht für ein laufendes Beratungsprojekt" },
+  { label: "⚡ Quick Update", prompt: "Erstelle ein kurzes Status-Update für meinen nächsten Kunden-Call (3-5 Slides)." },
   { label: "🔍 Slide-Titel zu Action Titles verbessern", prompt: "Ich habe folgende Slide-Titel. Bitte verbessere sie zu Action Titles nach dem Pyramid Principle: 1. Marktübersicht, 2. Wettbewerbsanalyse, 3. Finanzielle Ergebnisse" },
 ];
 
