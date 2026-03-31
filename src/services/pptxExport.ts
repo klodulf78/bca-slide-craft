@@ -1,6 +1,7 @@
 import PptxGenJS from 'pptxgenjs';
 import { BCA_COLORS, BCA_FONTS } from '@/constants/brand';
 import { ICON_UNICODE } from '@/components/slides/editors/IconPicker';
+import { LOGO_BLUE_BASE64, LOGO_WHITE_BASE64 } from '@/constants/logoData';
 
 interface SlideContent {
   template_id: string;
