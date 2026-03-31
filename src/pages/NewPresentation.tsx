@@ -59,7 +59,7 @@ function isSlideComplete(templateId: string, content: Record<string, any>): bool
 
 export default function NewPresentation() {
   const navigate = useNavigate();
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(0); // 0 = preset selection
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [selectedTemplates, setSelectedTemplates] = useState<string[]>([]);
@@ -69,6 +69,16 @@ export default function NewPresentation() {
   const [savedId, setSavedId] = useState<string | null>(null);
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
   const autoSaveRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const [presets, setPresets] = useState<Preset[]>([]);
+  const [presetsLoading, setPresetsLoading] = useState(true);
+
+  // Load presets
+  useEffect(() => {
+    supabase.from("presentation_presets").select("*").then(({ data }) => {
+      if (data) setPresets(data as any[]);
+      setPresetsLoading(false);
+    });
+  }, []);
 
   // Initialize slides content when entering step 4
   useEffect(() => {
