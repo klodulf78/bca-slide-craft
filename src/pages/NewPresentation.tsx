@@ -85,9 +85,9 @@ export default function NewPresentation() {
     const payload = {
       title,
       description: description || null,
-      selected_templates: orderedTemplates,
-      slides_content: slidesContent,
-      status: "draft" as string,
+      selected_templates: orderedTemplates as unknown as Json,
+      slides_content: slidesContent as unknown as Json,
+      status: "draft",
     };
 
     let result;
