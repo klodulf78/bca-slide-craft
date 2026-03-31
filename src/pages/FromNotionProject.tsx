@@ -10,6 +10,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Loader2, Plus, Trash2, CalendarIcon, Lightbulb, Database, ArrowRight } from "lucide-react";
+import { FileUploadZone } from "@/components/FileUploadZone";
+import { formatFileContext, type ProcessedFile } from "@/services/fileParser";
 import { supabase } from "@/integrations/supabase/client";
 import { SlidePreview } from "@/components/slides/SlidePreview";
 import { generatePresentation } from "@/services/pptxExport";
